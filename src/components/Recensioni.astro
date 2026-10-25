@@ -1,0 +1,91 @@
+---
+import { single } from '../lib/content';
+
+const r = await single('recensioni');
+const ui = await single('ui');
+---
+
+<section id="recensioni" class="reviews">
+  <p class="eyebrow eyebrow--muted">{r.eyebrow}</p>
+  <h2 class="section-title reviews__title">{r.title}</h2>
+  <div class="reviews__grid">
+    {
+      r.items.map((rev) => (
+        <figure class="reviews__card">
+          <span class="reviews__quote-mark" aria-hidden="true">
+            "
+          </span>
+          <blockquote>{rev.quote}</blockquote>
+          <div class="reviews__stars" role="img" aria-label={ui.starsLabel.replace('{n}', String(rev.stars))}>
+            {'★'.repeat(rev.stars)}
+          </div>
+          <figcaption>
+            <p class="reviews__name">{rev.name}</p>
+            {rev.trip && <p class="reviews__trip">{rev.trip}</p>}
+          </figcaption>
+        </figure>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .reviews {
+    padding: 110px var(--gutter);
+    background: var(--sage-dark);
+    color: var(--white);
+  }
+  .reviews__title {
+    margin-bottom: 64px;
+  }
+  .reviews__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 40px;
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+  .reviews__card {
+    margin: 0;
+    background: var(--white);
+    color: var(--ink);
+    padding: 36px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    transition: transform var(--ease);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .reviews__card:hover {
+      transform: translateY(-6px);
+    }
+  }
+  .reviews__quote-mark {
+    font-family: var(--font-body);
+    font-size: 48px;
+    line-height: 1;
+    color: var(--blush);
+  }
+  .reviews__card blockquote {
+    font-size: 18px;
+    line-height: 1.7;
+    margin: 0;
+    opacity: 0.85;
+    flex: 1;
+  }
+  .reviews__stars {
+    font-size: 17px;
+    color: var(--blush);
+    letter-spacing: 2px;
+  }
+  .reviews__name {
+    font-weight: 500;
+    margin: 0;
+    font-size: 17px;
+  }
+  .reviews__trip {
+    margin: 0;
+    font-size: 12px;
+    opacity: 0.6;
+  }
+</style>

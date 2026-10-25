@@ -1,0 +1,24 @@
+{
+  "eyebrow": "Chi ha viaggiato con me",
+  "title": "Recensioni",
+  "items": [
+    {
+      "quote": "Ci ha ascoltati davvero, non ci ha venduto un pacchetto. Il viaggio in Giappone è stato esattamente come lo sognavamo.",
+      "name": "Marco e Giulia",
+      "trip": "Honey Moon, Giappone",
+      "stars": 5
+    },
+    {
+      "quote": "La prima volta che portavamo i bambini così lontano. Tutto organizzato con attenzione, zero stress.",
+      "name": "Famiglia Rossi",
+      "trip": "Viaggio in famiglia, Kenya",
+      "stars": 5
+    },
+    {
+      "quote": "Un itinerario su misura, con consigli preziosi anche per le piccole cose. Torneremo per il prossimo viaggio.",
+      "name": "Elena",
+      "trip": "Viaggio di coppia, Portogallo",
+      "stars": 5
+    }
+  ]
+}

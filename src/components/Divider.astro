@@ -1,0 +1,30 @@
+---
+import Img from './Img.astro';
+import { single } from '../lib/content';
+
+const { divider } = await single('site');
+---
+
+{
+  divider && (
+    <div class="divider" aria-hidden="true">
+      <Img src={divider} alt="" widths={[520, 1040]} sizes="(max-width: 600px) 88vw, 520px" />
+    </div>
+  )
+}
+
+<style>
+  .divider {
+    padding: 20px var(--gutter);
+    background: var(--white);
+    display: flex;
+    justify-content: center;
+  }
+  .divider :global(img) {
+    width: 100%;
+    max-width: 520px;
+    height: auto;
+    opacity: 0.85;
+    display: block;
+  }
+</style>

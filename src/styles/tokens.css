@@ -1,0 +1,32 @@
+/* Design tokens — unica fonte per colori, font, raggi e ombre. */
+:root {
+  /* Colori */
+  --sage: #7d8f90;
+  --sage-dark: #556b6b;
+  --blush: #d9bec2;
+  --blush-light: #f6ecee;
+  --ink: #1a1a1a;
+  --white: #ffffff;
+
+  /* Font */
+  --font-body: 'Lato', sans-serif;
+  --font-title: 'Playfair Display', serif;
+  --font-script: 'Great Vibes', cursive;
+  --font-mono: monospace;
+
+  /* Spaziature */
+  --gutter: 6vw;
+
+  /* Raggi */
+  --petal: 22px 8px 22px 8px;
+  --petal-alt: 8px 22px 8px 22px;
+
+  /* Ombre */
+  --shadow-nav: 0 8px 32px rgba(26, 26, 26, 0.12);
+  --shadow-card: 0 10px 24px rgba(26, 26, 26, 0.12);
+  --shadow-float: 0 6px 18px rgba(0, 0, 0, 0.25);
+
+  /* Tipografia ricorrente */
+  --h2-size: clamp(28px, 4vw, 42px);
+  --ease: 0.15s ease;
+}

@@ -1,0 +1,23 @@
+{
+  "eyebrow": "Il modo che preferisco",
+  "title": "Raccontami il tuo viaggio",
+  "text": "Ho creato un modulo con le domande giuste per capire subito cosa stai cercando — così posso risponderti in modo mirato, senza passaggi inutili.",
+  "openButton": "Compila il modulo di contatto",
+  "questions": [
+    {
+      "label": "Che viaggio sogni?",
+      "placeholder": "Es. luna di miele in Giappone"
+    },
+    {
+      "label": "Quando?",
+      "placeholder": "Es. primavera 2027"
+    },
+    {
+      "label": "Per quante persone?",
+      "placeholder": "Es. 2 adulti"
+    }
+  ],
+  "submitButton": "Invia",
+  "successMessage": "Grazie! Ho ricevuto il tuo racconto, ti rispondo entro 24 ore.",
+  "otherChannels": "Altri canali"
+}

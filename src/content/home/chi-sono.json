@@ -1,0 +1,20 @@
+{
+  "eyebrow": "Chi Sono?",
+  "title": "Mi prendo cura del tuo [[foto]]viaggio come se fosse il mio.",
+  "photo": "/src/assets/uploads/elena.png",
+  "photoAlt": "Elena, travel designer",
+  "paragraphs": [
+    "La prima volta che ho capito di essere fatta per questo lavoro ero a Zanzibar. Camminavo e piangevo, non perché volevo tornare a casa, ma perché capivo che casa non era abbastanza, che il mondo era troppo bello per non condividerlo.",
+    "Oggi Tommy ha tre anni e l'ho visto mangiare i noodles con le bacchette, correre tra i torii rossi in Giappone e camminare tra i souk a Doha. L'ho visto diventare curioso, coraggioso, aperto. È il regalo più grande che potessi fargli, e lo stesso regalo che voglio fare a te.",
+    "Preferisco spendere in emozioni che in borse firmate, [[/foto]]sono empatica, allegra, innamorata del mondo. E quando organizzo un viaggio ci metto tutto me stessa, perché per me non è mai solo un viaggio. È un sogno che diventa reale."
+  ],
+  "whyTitle": "Perché scegliermi",
+  "whyItems": [
+    "Ogni itinerario nasce da una vera conversazione, mai da un catalogo preconfezionato.",
+    "Prima chiamata sempre gratuita e senza impegno: decidi solo dopo avermi conosciuta.",
+    "Resto raggiungibile durante il viaggio, non solo prima della partenza.",
+    "Trasparenza totale sui costi: nessuna commissione nascosta."
+  ],
+  "valuesTitle": "I miei valori",
+  "valuesItems": []
+}

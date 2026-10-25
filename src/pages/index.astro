@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import ChiSono from '../components/ChiSono.astro';
+import Servizi from '../components/Servizi.astro';
+import Divider from '../components/Divider.astro';
+import ComeFunziona from '../components/ComeFunziona.astro';
+import Viaggi from '../components/Viaggi.astro';
+import Feature from '../components/Feature.astro';
+import Consigli from '../components/Consigli.astro';
+import Recensioni from '../components/Recensioni.astro';
+import Contatti from '../components/Contatti.astro';
+import { getVisibleSections } from '../lib/sections';
+
+const { isVisible } = await getVisibleSections();
+---
+
+<Base home>
+  <Hero />
+  <ChiSono />
+  <Servizi />
+  <Divider />
+  <ComeFunziona />
+  {isVisible('viaggi') && <Viaggi />}
+  <Feature id="nozze" />
+  <Divider />
+  <Feature id="famiglia" />
+  {isVisible('consigli') && <Consigli />}
+  {isVisible('recensioni') && <Recensioni />}
+  <Contatti />
+</Base>

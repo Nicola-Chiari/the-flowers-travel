@@ -1,0 +1,135 @@
+---
+// Sezione testo + immagine (Nozze, Famiglia).
+import Img from './Img.astro';
+import { single } from '../lib/content';
+
+interface Props {
+  id: 'nozze' | 'famiglia';
+}
+const { id } = Astro.props;
+const f = await single(id);
+const isNozze = id === 'nozze';
+---
+
+<section id={id} class:list={['feature', `feature--${id}`]}>
+  <div class="feature__text">
+    <p class="feature__eyebrow">{f.eyebrow}</p>
+    <h2 class="feature__title">{f.title}</h2>
+    <p class="feature__body">{f.text}</p>
+    <a href="#contatti" class:list={['feature__cta', isNozze ? 'btn btn--outline' : 'feature__cta--dark']}>{f.cta}</a>
+  </div>
+  {
+    f.image ? (
+      <Img
+        src={f.image}
+        alt={f.imageAlt || f.title}
+        class="feature__media"
+        widths={[600, 900, 1200, 1600]}
+        sizes="(max-width: 759px) 88vw, 44vw"
+      />
+    ) : (
+      <div class="feature__media feature__media--empty" aria-hidden="true" />
+    )
+  }
+</section>
+
+<style>
+  .feature {
+    padding: 110px var(--gutter);
+    background: var(--white);
+    color: var(--ink);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 60px;
+    align-items: center;
+  }
+  .feature--famiglia .feature__text {
+    order: 2;
+  }
+  .feature--famiglia :global(.feature__media) {
+    order: 1;
+  }
+  .feature :global(.feature__media) {
+    position: relative;
+    width: 100%;
+    height: 380px;
+    object-fit: cover;
+    display: block;
+  }
+  .feature--nozze .feature__media--empty {
+    background: repeating-linear-gradient(135deg, var(--blush) 0 30px, var(--ink) 30px 60px);
+  }
+  .feature--famiglia .feature__media--empty {
+    background: repeating-linear-gradient(135deg, var(--ink) 0 30px, var(--sage) 30px 60px);
+  }
+  .feature__eyebrow {
+    font-family: var(--font-script);
+    font-size: 46px;
+    letter-spacing: 0.02em;
+    font-weight: 600;
+    margin: 0 0 16px;
+  }
+  .feature--nozze .feature__eyebrow {
+    color: var(--blush);
+  }
+  .feature--famiglia .feature__eyebrow {
+    color: var(--ink);
+    opacity: 0.65;
+  }
+  .feature__title {
+    font-family: var(--font-title);
+    font-weight: 500;
+    font-size: clamp(30px, 4vw, 46px);
+    line-height: 1.2;
+    margin: 0 0 24px;
+    color: var(--ink);
+  }
+  .feature__body {
+    font-size: 19px;
+    line-height: 1.7;
+    color: var(--ink);
+    opacity: 0.75;
+    max-width: 460px;
+    margin: 0 0 32px;
+  }
+  .feature__cta--dark {
+    display: inline-block;
+    background: var(--ink);
+    color: var(--white);
+    text-decoration: none;
+    padding: 14px 30px;
+    border-radius: var(--petal);
+    font-size: 17px;
+    letter-spacing: 0.03em;
+    transition:
+      transform var(--ease),
+      background var(--ease);
+  }
+  .feature__cta--dark:hover {
+    background: var(--blush);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .feature__cta--dark:hover {
+      transform: scale(1.06);
+    }
+    .feature__cta--dark:active {
+      transform: scale(0.97);
+    }
+  }
+  @media (max-width: 759px) {
+    .feature {
+      padding: 90px var(--gutter);
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .feature :global(.feature__media) {
+      height: 300px;
+    }
+    .feature--famiglia .feature__text {
+      order: 0;
+    }
+    .feature--famiglia :global(.feature__media) {
+      order: 1;
+    }
+  }
+</style>

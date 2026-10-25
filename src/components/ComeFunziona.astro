@@ -1,0 +1,82 @@
+---
+import Img from './Img.astro';
+import { single } from '../lib/content';
+
+const c = await single('comeFunziona');
+---
+
+<section id="come-funziona" class="steps">
+  <p class="eyebrow eyebrow--pink">{c.eyebrow}</p>
+  <h2 class="section-title steps__title">{c.title}</h2>
+  <ol class="steps__list">
+    {
+      c.steps.map((step) => (
+        <li class="steps__item">
+          {step.image ? (
+            <div class="steps__img">
+              <Img src={step.image} alt="" widths={[100, 200, 300]} sizes="100px" />
+            </div>
+          ) : (
+            <div class="steps__img steps__img--empty" aria-hidden="true" />
+          )}
+          <h3>{step.title}</h3>
+          <p>{step.desc}</p>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .steps {
+    padding: 100px var(--gutter);
+    background: var(--white);
+  }
+  .steps__title {
+    margin-bottom: 64px;
+  }
+  .steps__list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .steps__item {
+    flex: 1 1 220px;
+    max-width: 260px;
+    text-align: center;
+  }
+  .steps__img {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  .steps__img :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .steps__img--empty {
+    background: repeating-linear-gradient(45deg, var(--sage) 0 14px, var(--blush) 14px 28px);
+  }
+  .steps__item h3 {
+    font-family: var(--font-title);
+    font-weight: 500;
+    font-size: 20px;
+    margin: 0 0 10px;
+  }
+  .steps__item p {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--ink);
+    opacity: 0.7;
+    margin: 0;
+  }
+</style>

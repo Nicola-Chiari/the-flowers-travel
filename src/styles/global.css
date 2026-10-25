@@ -1,0 +1,157 @@
+@import './tokens.css';
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--white);
+}
+
+:where(section[id], [data-anchor]) {
+  scroll-margin-top: 100px;
+}
+
+img,
+video {
+  max-width: 100%;
+}
+
+button,
+input,
+textarea {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--blush);
+  outline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Titoletti corsivi e titoli di sezione */
+.eyebrow {
+  font-family: var(--font-script);
+  font-size: 46px;
+  letter-spacing: 0.02em;
+  font-weight: 600;
+  margin: 0 0 12px;
+  text-align: center;
+}
+.eyebrow--pink {
+  color: var(--blush);
+}
+.eyebrow--muted {
+  color: var(--ink);
+  opacity: 0.6;
+}
+.section-title {
+  font-family: var(--font-title);
+  font-weight: 500;
+  font-size: var(--h2-size);
+  text-align: center;
+  margin: 0;
+}
+
+/* Pulsanti a petalo */
+.btn {
+  display: inline-block;
+  text-decoration: none;
+  padding: 14px 30px;
+  font-size: 17px;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: transform var(--ease), background var(--ease), color var(--ease);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .btn:hover {
+    transform: scale(1.06);
+  }
+  .btn:active {
+    transform: scale(0.97);
+  }
+}
+.btn--fill {
+  background: var(--blush);
+  border: 1px solid var(--blush);
+  color: var(--white);
+  border-radius: var(--petal);
+}
+.btn--outline {
+  background: transparent;
+  border: 1px solid var(--blush);
+  color: var(--blush);
+  border-radius: var(--petal-alt);
+}
+.btn--outline:hover {
+  background: var(--blush);
+  color: var(--white);
+}
+
+/* Segnaposto per immagini mancanti */
+.placeholder {
+  background: repeating-linear-gradient(45deg, var(--sage) 0 16px, var(--blush) 16px 32px);
+}
+
+/* Testo ricco dal CMS */
+.prose > :first-child {
+  margin-top: 0;
+}
+.prose > :last-child {
+  margin-bottom: 0;
+}
+.prose p,
+.prose ul,
+.prose ol {
+  margin: 0 0 1em;
+}
+.prose a {
+  color: inherit;
+  text-decoration-color: var(--blush);
+  text-underline-offset: 3px;
+}
+.prose h2,
+.prose h3 {
+  font-family: var(--font-title);
+  font-weight: 500;
+  line-height: 1.25;
+  margin: 1.6em 0 0.6em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@media (max-width: 479px) {
+  .eyebrow {
+    font-size: 38px;
+  }
+}

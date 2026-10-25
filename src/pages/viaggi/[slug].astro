@@ -1,0 +1,71 @@
+---
+import { render } from 'astro:content';
+import Page from '../../layouts/Page.astro';
+import Img from '../../components/Img.astro';
+import { getViaggi, single } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const viaggi = await getViaggi();
+  return viaggi.map((v) => ({ params: { slug: v.id }, props: { v } }));
+}
+
+const { v } = Astro.props;
+const { Content } = await render(v);
+const intro = await single('viaggiIntro');
+const ui = await single('ui');
+const d = v.data;
+const meta = [d.destination, d.duration].filter(Boolean).join(', ');
+const images = [
+  ...(d.cover ? [{ image: d.cover, alt: d.coverAlt || d.title }] : []),
+  ...d.gallery.map((g) => ({ image: g.image, alt: g.alt || d.title })),
+];
+const description = (v.body ?? '').replace(/[*_#>\[\]()`]/g, '').trim().slice(0, 158) || undefined;
+---
+
+<Page
+  title={d.title}
+  eyebrow={d.category}
+  meta={meta}
+  description={description}
+  image={d.cover}
+  backHref="/#viaggi"
+  backLabel={ui.pages.storyBack}
+>
+  {
+    images.length > 0 && (
+      <div slot="media" class="story-page__media">
+        {images.map((img, i) => (
+          <Img
+            src={img.image}
+            alt={img.alt}
+            widths={[640, 1000, 1440]}
+            sizes="(max-width: 960px) 88vw, 960px"
+            loading={i === 0 ? 'eager' : 'lazy'}
+          />
+        ))}
+      </div>
+    )
+  }
+  <Content />
+  <a slot="after" href="/#contatti" class="btn btn--fill story-page__cta">{intro.modalCta}</a>
+</Page>
+
+<style>
+  .story-page__media {
+    max-width: 960px;
+    margin: 0 auto 48px;
+    display: grid;
+    gap: 16px;
+  }
+  .story-page__media :global(img) {
+    width: 100%;
+    height: auto;
+    max-height: 560px;
+    object-fit: cover;
+    display: block;
+    border-radius: 4px;
+  }
+  .story-page__cta {
+    margin-top: 32px;
+  }
+</style>
