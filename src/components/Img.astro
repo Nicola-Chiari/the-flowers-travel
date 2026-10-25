@@ -1,0 +1,37 @@
+---
+// Immagine dal CMS: ridimensionata e convertita in WebP alle larghezze richieste.
+// Solo WebP (niente AVIF): build molto più rapide, e ogni salvataggio nel CMS è una build.
+import type { HTMLAttributes } from 'astro/types';
+import { Image } from 'astro:assets';
+import { resolveImage } from '../lib/media';
+
+type Props = Omit<HTMLAttributes<'img'>, 'src' | 'alt' | 'width' | 'height'> & {
+  src: string;
+  alt: string;
+  widths: number[];
+  sizes: string;
+};
+
+const { src, alt, widths, sizes, loading = 'lazy', ...rest } = Astro.props;
+const image = resolveImage(src);
+const usable = typeof image === 'object' ? widths.filter((w) => w <= image.width) : widths;
+if (typeof image === 'object' && usable.length === 0) usable.push(image.width);
+---
+
+{
+  typeof image === 'string' ? (
+    <img src={image} alt={alt} loading={loading} decoding="async" {...rest} />
+  ) : image ? (
+    <Image
+      src={image}
+      alt={alt}
+      widths={usable}
+      sizes={sizes}
+      format="webp"
+      quality={80}
+      loading={loading}
+      decoding="async"
+      {...rest}
+    />
+  ) : null
+}

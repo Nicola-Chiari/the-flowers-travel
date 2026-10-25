@@ -1,0 +1,20 @@
+---
+import { getEntry, render } from 'astro:content';
+import Page from '../layouts/Page.astro';
+import { single } from '../lib/content';
+
+interface Props {
+  id: 'privacy' | 'cookie';
+}
+const entry = await getEntry('pagine', Astro.props.id);
+if (!entry) throw new Error(`Manca la pagina "${Astro.props.id}" in src/content/pagine.`);
+const { Content } = await render(entry);
+const ui = await single('ui');
+const updated = entry.data.updated
+  ? `${ui.pages.updated} ${entry.data.updated.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })}`
+  : undefined;
+---
+
+<Page title={entry.data.title} meta={updated} backHref="/" backLabel={ui.pages.backHome}>
+  <Content />
+</Page>

@@ -1,0 +1,102 @@
+---
+import { getImage } from 'astro:assets';
+import '@fontsource/lato/300.css';
+import '@fontsource/lato/400.css';
+import '@fontsource/lato/700.css';
+import '@fontsource/playfair-display/500.css';
+import '@fontsource/playfair-display/600.css';
+import '@fontsource/playfair-display/700.css';
+import '@fontsource/great-vibes/400.css';
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import { single } from '../lib/content';
+import { resolveImage } from '../lib/media';
+
+interface Props {
+  /** Titolo della pagina; vuoto = titolo SEO del sito. */
+  title?: string;
+  description?: string;
+  /** Immagine di condivisione (percorso CMS); vuota = quella del sito. */
+  image?: string;
+  noindex?: boolean;
+  home?: boolean;
+}
+const { title, description, image, noindex = false, home = false } = Astro.props;
+const site = await single('site');
+const seo = site.seo;
+const pageTitle = title ? `${title} — The Flowers Travel` : seo.title;
+const pageDescription = description || seo.description;
+const canonical = new URL(Astro.url.pathname.replace(/\.html$/, '').replace(/\/index$/, '/'), Astro.site);
+
+async function shareImage(path: string | undefined) {
+  const img = resolveImage(path);
+  if (!img) return undefined;
+  if (typeof img === 'string') return img;
+  const out = await getImage({ src: img, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+  return new URL(out.src, Astro.site).href;
+}
+const ogImage = (await shareImage(image)) ?? (await shareImage(seo.image)) ?? (await shareImage(site.logoNav));
+
+const sameAs = Object.values(site.socials).filter(Boolean);
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TravelAgency',
+  name: 'The Flowers Travel',
+  url: new URL('/', Astro.site).href,
+  description: seo.description,
+  telephone: site.phoneLink,
+  email: site.email,
+  ...(ogImage ? { image: ogImage } : {}),
+  ...(site.vat ? { vatID: site.vat } : {}),
+  ...(sameAs.length ? { sameAs } : {}),
+};
+const base = home ? '' : '/';
+---
+
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <link rel="canonical" href={canonical.href} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#7D8F90" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="it_IT" />
+    <meta property="og:site_name" content="The Flowers Travel" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={canonical.href} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+
+    {home && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body>
+    <Nav base={base} alwaysVisible={!home} />
+    <main>
+      <slot />
+    </main>
+    <Footer base={base} />
+    <WhatsAppButton />
+  </body>
+</html>
+
+<style is:global>
+  html:has(dialog[open]) {
+    overflow: hidden;
+  }
+</style>

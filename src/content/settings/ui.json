@@ -1,0 +1,139 @@
+{
+  "nav": [
+    {
+      "label": "Come funziona",
+      "target": "come-funziona"
+    },
+    {
+      "label": "Viaggi",
+      "target": "viaggi"
+    },
+    {
+      "label": "Nozze",
+      "target": "nozze"
+    },
+    {
+      "label": "Famiglia",
+      "target": "famiglia"
+    },
+    {
+      "label": "Chi sono",
+      "target": "chi-sono"
+    },
+    {
+      "label": "Contatti",
+      "target": "contatti"
+    }
+  ],
+  "navMenuOpen": "Apri il menu",
+  "navMenuClose": "Chiudi il menu",
+  "heroScroll": "Scorri per scoprire di più",
+  "carouselPrev": "Viaggio precedente",
+  "carouselNext": "Viaggio successivo",
+  "close": "Chiudi",
+  "whatsapp": "Scrivimi su WhatsApp",
+  "form": {
+    "nameLabel": "Nome",
+    "namePlaceholder": "Come ti chiami?",
+    "emailLabel": "Email",
+    "emailPlaceholder": "La tua email",
+    "phoneLabel": "Telefono (facoltativo)",
+    "phonePlaceholder": "Per richiamarti, se preferisci",
+    "consentBefore": "Ho letto l'",
+    "consentLink": "informativa privacy",
+    "consentAfter": " e acconsento al trattamento dei miei dati per ricevere una risposta.",
+    "sending": "Invio in corso…",
+    "errorEmail": "Inserisci un indirizzo email valido.",
+    "errorConsent": "Per inviare la richiesta serve il consenso privacy.",
+    "errorSend": "Non sono riuscita a ricevere il messaggio. Riprova, oppure scrivimi direttamente via email.",
+    "emailSubject": "Nuova richiesta di viaggio dal sito"
+  },
+  "channels": {
+    "phone": "Telefono",
+    "email": "Email"
+  },
+  "newsletter": {
+    "placeholder": "La tua email",
+    "button": "Iscriviti",
+    "consentBefore": "Acconsento a ricevere la newsletter (",
+    "consentLink": "privacy",
+    "consentAfter": ").",
+    "errorSend": "Iscrizione non riuscita, riprova tra poco."
+  },
+  "footer": {
+    "menuTitle": "Menu",
+    "linksTitle": "Link utili",
+    "socialTitle": "Social",
+    "menu": [
+      {
+        "label": "Home",
+        "target": "hero",
+        "emphasis": false,
+        "indent": false
+      },
+      {
+        "label": "Chi sono",
+        "target": "chi-sono",
+        "emphasis": true,
+        "indent": false
+      },
+      {
+        "label": "Servizi",
+        "target": "servizi",
+        "emphasis": false,
+        "indent": false
+      },
+      {
+        "label": "Viaggi realizzati",
+        "target": "viaggi",
+        "emphasis": true,
+        "indent": false
+      },
+      {
+        "label": "Nozze",
+        "target": "nozze",
+        "emphasis": false,
+        "indent": true
+      },
+      {
+        "label": "Famiglia",
+        "target": "famiglia",
+        "emphasis": false,
+        "indent": true
+      },
+      {
+        "label": "Consigli",
+        "target": "consigli",
+        "emphasis": false,
+        "indent": false
+      },
+      {
+        "label": "Recensioni",
+        "target": "recensioni",
+        "emphasis": false,
+        "indent": false
+      },
+      {
+        "label": "Contatti",
+        "target": "contatti",
+        "emphasis": false,
+        "indent": false
+      }
+    ],
+    "privacy": "Privacy Policy",
+    "cookie": "Cookie",
+    "copyright": "© {anno} The Flowers Travel. Tutti i diritti riservati.",
+    "vatPrefix": "P.IVA"
+  },
+  "pages": {
+    "updated": "Ultimo aggiornamento:",
+    "backHome": "Torna alla home",
+    "thanksTitle": "Grazie!",
+    "thanksText": "Ho ricevuto il tuo messaggio, ti rispondo entro 24 ore.",
+    "notFoundTitle": "Questa pagina non esiste",
+    "notFoundText": "Forse il link è cambiato. Torna alla home e riparti da lì.",
+    "storyBack": "Tutti i viaggi",
+    "articleBack": "Tutti i consigli"
+  },
+  "starsLabel": "{n} stelle su 5"
+}

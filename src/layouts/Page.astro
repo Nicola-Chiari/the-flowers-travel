@@ -1,0 +1,75 @@
+---
+// Pagina di testo semplice (privacy, cookie, grazie, 404, articoli, viaggi).
+import Base from './Base.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  eyebrow?: string;
+  meta?: string;
+  backHref?: string;
+  backLabel?: string;
+}
+const { title, description, image, noindex, eyebrow, meta, backHref, backLabel } = Astro.props;
+---
+
+<Base title={title} description={description} image={image} noindex={noindex}>
+  <article class="page">
+    <slot name="media" />
+    <div class="page__inner">
+      {eyebrow && <p class="page__eyebrow">{eyebrow}</p>}
+      <h1 class="page__title">{title}</h1>
+      {meta && <p class="page__meta">{meta}</p>}
+      <div class="page__body prose">
+        <slot />
+      </div>
+      <slot name="after" />
+      {backHref && backLabel && <a href={backHref} class="page__back">← {backLabel}</a>}
+    </div>
+  </article>
+</Base>
+
+<style>
+  .page {
+    padding: 150px var(--gutter) 110px;
+    min-height: 70vh;
+  }
+  .page__inner {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .page__eyebrow {
+    font-family: var(--font-script);
+    font-size: 34px;
+    letter-spacing: 0.02em;
+    color: var(--sage);
+    margin: 0 0 8px;
+  }
+  .page__title {
+    font-family: var(--font-title);
+    font-weight: 500;
+    font-size: clamp(32px, 5vw, 48px);
+    line-height: 1.2;
+    margin: 0 0 12px;
+  }
+  .page__meta {
+    font-size: 17px;
+    opacity: 0.6;
+    margin: 0 0 32px;
+  }
+  .page__body {
+    font-size: 18px;
+    line-height: 1.75;
+    color: rgba(26, 26, 26, 0.85);
+  }
+  .page__back {
+    display: table;
+    margin-top: 48px;
+    color: var(--ink);
+    text-decoration-color: var(--blush);
+    text-underline-offset: 4px;
+    font-size: 17px;
+  }
+</style>

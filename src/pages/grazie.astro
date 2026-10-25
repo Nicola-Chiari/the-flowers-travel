@@ -1,0 +1,10 @@
+---
+import Page from '../layouts/Page.astro';
+import { single } from '../lib/content';
+
+const ui = await single('ui');
+---
+
+<Page title={ui.pages.thanksTitle} noindex backHref="/" backLabel={ui.pages.backHome}>
+  <p>{ui.pages.thanksText}</p>
+</Page>

@@ -1,0 +1,58 @@
+---
+import { single } from '../lib/content';
+
+const site = await single('site');
+const ui = await single('ui');
+const href = `https://wa.me/${site.whatsappNumber}?text=${encodeURIComponent(site.whatsappMessage)}`;
+---
+
+<a href={href} target="_blank" rel="noopener" aria-label={ui.whatsapp} class="wa">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true"
+    ><path
+      d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.06L2 22l4.94-1.38C8.42 21.5 10.15 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"
+      fill="#FFFFFF"
+      opacity="0.15"></path><path
+      d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.06L2 22l4.94-1.38C8.42 21.5 10.15 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"
+      stroke="#FFFFFF"
+      stroke-width="1.4"></path></svg
+  >
+</a>
+
+<style>
+  .wa {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 100;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: var(--blush);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-float);
+    transition:
+      transform var(--ease),
+      background var(--ease);
+  }
+  .wa:hover {
+    background: var(--ink);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .wa:hover {
+      transform: scale(1.1);
+    }
+    .wa:active {
+      transform: scale(0.92);
+    }
+  }
+  @media (max-width: 479px) {
+    .wa {
+      bottom: 16px;
+      right: 16px;
+      width: 52px;
+      height: 52px;
+    }
+  }
+</style>

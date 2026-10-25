@@ -1,0 +1,93 @@
+---
+import Img from './Img.astro';
+import { getArticoli, single } from '../lib/content';
+
+const c = await single('consigli');
+const articoli = (await getArticoli()).slice(0, 3);
+---
+
+<section id="consigli" class="tips">
+  <p class="tips__eyebrow">{c.eyebrow}</p>
+  <h2 class="section-title tips__title">{c.title}</h2>
+  <div class="tips__grid">
+    {
+      articoli.map((a) => (
+        <a href={`/consigli/${a.id}`} class="tips__card">
+          {a.data.cover ? (
+            <Img
+              src={a.data.cover}
+              alt={a.data.coverAlt || a.data.title}
+              class="tips__img"
+              widths={[400, 700]}
+              sizes="(max-width: 759px) 88vw, 350px"
+            />
+          ) : (
+            <div class="tips__img tips__img--empty" aria-hidden="true" />
+          )}
+          <p class="tips__category">{a.data.category}</p>
+          <h3>{a.data.title}</h3>
+        </a>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .tips {
+    padding: 100px var(--gutter);
+    background: var(--white);
+  }
+  .tips__eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--blush);
+    margin: 0 0 12px;
+    text-align: center;
+  }
+  .tips__title {
+    margin-bottom: 56px;
+  }
+  .tips__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 32px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .tips__card {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .tips__card :global(.tips__img) {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    display: block;
+    margin-bottom: 18px;
+  }
+  .tips__img--empty {
+    background: repeating-linear-gradient(90deg, var(--sage) 0 20px, var(--blush) 20px 40px);
+  }
+  .tips__category {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin: 0 0 8px;
+  }
+  .tips__card h3 {
+    font-family: var(--font-title);
+    font-weight: 500;
+    font-size: 19px;
+    line-height: 1.35;
+    margin: 0;
+  }
+  .tips__card:hover h3 {
+    text-decoration: underline;
+    text-decoration-color: var(--blush);
+    text-underline-offset: 4px;
+  }
+</style>

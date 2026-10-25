@@ -1,0 +1,56 @@
+---
+import { render } from 'astro:content';
+import Page from '../../layouts/Page.astro';
+import Img from '../../components/Img.astro';
+import { getArticoli, single } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const articoli = await getArticoli();
+  return articoli.map((a) => ({ params: { slug: a.id }, props: { a } }));
+}
+
+const { a } = Astro.props;
+const { Content } = await render(a);
+const ui = await single('ui');
+const d = a.data;
+const date = d.date.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<Page
+  title={d.title}
+  eyebrow={d.category}
+  meta={date}
+  description={d.excerpt || undefined}
+  image={d.cover}
+  backHref="/#consigli"
+  backLabel={ui.pages.articleBack}
+>
+  {
+    d.cover && (
+      <div slot="media" class="article__media">
+        <Img
+          src={d.cover}
+          alt={d.coverAlt || d.title}
+          widths={[640, 1000, 1440]}
+          sizes="(max-width: 960px) 88vw, 960px"
+          loading="eager"
+        />
+      </div>
+    )
+  }
+  <Content />
+</Page>
+
+<style>
+  .article__media {
+    max-width: 960px;
+    margin: 0 auto 48px;
+  }
+  .article__media :global(img) {
+    width: 100%;
+    height: auto;
+    max-height: 520px;
+    object-fit: cover;
+    display: block;
+  }
+</style>

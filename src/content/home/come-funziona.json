@@ -1,0 +1,26 @@
+{
+  "eyebrow": "Come funziona",
+  "title": "Quattro passi, zero fretta",
+  "steps": [
+    {
+      "title": "Mi racconti il tuo viaggio",
+      "desc": "Sogni, tempi, persone: mi basta il tuo racconto.",
+      "image": "/src/assets/uploads/racconti-viaggio.png"
+    },
+    {
+      "title": "Prima chiamata gratuita",
+      "desc": "Parliamo a voce, senza impegno, per capirci davvero.",
+      "image": "/src/assets/uploads/prima-chiamata.png"
+    },
+    {
+      "title": "Proposta su misura",
+      "desc": "Ricevi un itinerario pensato solo per voi.",
+      "image": ""
+    },
+    {
+      "title": "Si parte",
+      "desc": "Mi occupo di tutto: voi pensate solo a viverlo.",
+      "image": ""
+    }
+  ]
+}

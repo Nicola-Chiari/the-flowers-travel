@@ -1,0 +1,305 @@
+---
+import Img from './Img.astro';
+import SocialIcon from './SocialIcon.astro';
+import { single } from '../lib/content';
+import { getVisibleSections } from '../lib/sections';
+
+interface Props {
+  base?: string;
+}
+const { base = '' } = Astro.props;
+const site = await single('site');
+const ui = await single('ui');
+const { isVisible } = await getVisibleSections();
+const menu = ui.footer.menu.filter((m) => isVisible(m.target));
+const socialLabels = { instagram: 'Instagram', facebook: 'Facebook', tiktok: 'TikTok', pinterest: 'Pinterest' } as const;
+const socials = (Object.keys(socialLabels) as (keyof typeof socialLabels)[])
+  .map((key) => ({ key, label: socialLabels[key], url: site.socials[key] }))
+  .filter((s) => s.url);
+const year = new Date().getFullYear();
+const [copyBefore, copyAfter = ''] = ui.footer.copyright.split('{anno}');
+const nl = ui.newsletter;
+---
+
+<footer class="footer">
+  <div class="footer__grid">
+    <div>
+      <Img src={site.logoFooter} alt="The Flowers Travel" class="footer__logo" widths={[200, 400]} sizes="195px" />
+      <p class="footer__tagline">{site.footerTagline}</p>
+    </div>
+
+    <nav class="footer__col" aria-label={ui.footer.menuTitle}>
+      <p class="footer__heading">{ui.footer.menuTitle}</p>
+      {
+        menu.map((m) => (
+          <a
+            href={`${base}#${m.target}`}
+            class:list={['footer__link', { 'footer__link--strong': m.emphasis, 'footer__link--indent': m.indent }]}
+          >
+            {m.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="footer__col">
+      <p class="footer__heading">{ui.footer.linksTitle}</p>
+      <a href="/privacy" class="footer__link">{ui.footer.privacy}</a>
+      <a href="/cookie" class="footer__link">{ui.footer.cookie}</a>
+    </div>
+
+    <div>
+      {
+        socials.length > 0 && (
+          <>
+            <p class="footer__heading footer__heading--social">{ui.footer.socialTitle}</p>
+            <div class="footer__socials">
+              {socials.map((s) => (
+                <a href={s.url} target="_blank" rel="noopener" aria-label={s.label} class="footer__social">
+                  <SocialIcon name={s.key} />
+                </a>
+              ))}
+            </div>
+          </>
+        )
+      }
+      <p class="footer__nl-text">{site.newsletterText}</p>
+      <form
+        class="footer__nl"
+        name="newsletter"
+        method="POST"
+        action="/grazie"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        data-newsletter
+        data-error-email={ui.form.errorEmail}
+        data-error-consent={ui.form.errorConsent}
+        data-error-send={nl.errorSend}
+        data-sending={ui.form.sending}
+      >
+        <input type="hidden" name="form-name" value="newsletter" />
+        <p class="sr-only" aria-hidden="true">
+          <label>Bot <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+        </p>
+        <div class="footer__nl-row">
+          <label class="sr-only" for="nl-email">{nl.placeholder}</label>
+          <input id="nl-email" type="email" name="email" required autocomplete="email" placeholder={nl.placeholder} />
+          <button type="submit">{nl.button}</button>
+        </div>
+        <label class="footer__nl-consent">
+          <input type="checkbox" name="privacy" value="sì" required />
+          <span>{nl.consentBefore}<a href="/privacy">{nl.consentLink}</a>{nl.consentAfter}</span>
+        </label>
+        <p class="footer__nl-error" data-form-status role="alert" hidden></p>
+      </form>
+      <p class="footer__nl-thanks" data-newsletter-thanks role="status" hidden>{site.newsletterThanks}</p>
+    </div>
+  </div>
+
+  <div class="footer__bottom">
+    <p>
+      {copyBefore}<span data-year>{year}</span>{copyAfter}
+      {site.vat && <span class="footer__vat">{ui.footer.vatPrefix} {site.vat}</span>}
+    </p>
+    <p>{site.footerRight}</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding: 90px var(--gutter) 40px;
+    background: var(--sage);
+    color: var(--white);
+  }
+  .footer__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 48px;
+    max-width: 1200px;
+    margin: 0 auto 64px;
+  }
+  .footer :global(.footer__logo) {
+    height: 65px;
+    width: auto;
+    max-width: none;
+    margin-bottom: 16px;
+    display: block;
+  }
+  .footer__tagline {
+    font-size: 17px;
+    line-height: 1.6;
+    opacity: 0.65;
+    max-width: 240px;
+    margin: 0;
+  }
+  .footer__col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    font-size: 18px;
+  }
+  .footer__heading {
+    font-family: var(--font-title);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .footer__heading--social {
+    margin-bottom: 16px;
+  }
+  .footer__link {
+    color: var(--white);
+    text-decoration: none;
+    opacity: 0.8;
+  }
+  .footer__link:hover {
+    opacity: 1;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .footer__link--strong {
+    opacity: 1;
+    font-weight: 500;
+  }
+  .footer__link--indent {
+    padding-left: 14px;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  .footer__socials {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .footer__social {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    transition:
+      transform var(--ease),
+      background var(--ease),
+      border-color var(--ease);
+  }
+  .footer__social:hover {
+    background: var(--blush);
+    border-color: var(--blush);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .footer__social:hover {
+      transform: scale(1.1);
+    }
+  }
+  .footer__nl-text {
+    font-size: 17px;
+    line-height: 1.6;
+    opacity: 0.65;
+    max-width: 220px;
+    margin: 0 0 16px;
+  }
+  .footer__nl {
+    max-width: 260px;
+  }
+  .footer__nl-row {
+    display: flex;
+    gap: 8px;
+  }
+  .footer__nl-row input {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 12px;
+    border: 1px solid var(--white);
+    border-radius: 0;
+    background: transparent;
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 16px;
+  }
+  .footer__nl-row input::placeholder {
+    color: rgba(255, 255, 255, 0.75);
+  }
+  .footer__nl-row button {
+    padding: 10px 16px;
+    border: none;
+    background: var(--ink);
+    color: var(--white);
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform var(--ease);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .footer__nl-row button:hover {
+      transform: scale(1.06);
+    }
+  }
+  .footer__nl-consent {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    margin-top: 10px;
+    font-size: 13px;
+    line-height: 1.45;
+    opacity: 0.8;
+  }
+  .footer__nl-consent input {
+    margin: 2px 0 0;
+    flex-shrink: 0;
+    accent-color: var(--ink);
+  }
+  .footer__nl-consent a {
+    color: var(--white);
+  }
+  .footer__nl [aria-invalid='true'] {
+    outline: 2px solid var(--blush);
+  }
+  .footer__nl-error {
+    margin: 8px 0 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .footer__nl-thanks {
+    font-size: 16px;
+    color: var(--white);
+    margin: 0;
+  }
+  .footer__bottom {
+    max-width: 1200px;
+    margin: 0 auto;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 16px;
+    opacity: 0.55;
+  }
+  .footer__bottom p {
+    margin: 0;
+  }
+  .footer__vat::before {
+    content: ' · ';
+  }
+</style>
+
+<script>
+  import { enhanceForm } from '../scripts/forms';
+
+  document.querySelectorAll<HTMLElement>('[data-year]').forEach((el) => (el.textContent = String(new Date().getFullYear())));
+
+  const form = document.querySelector<HTMLFormElement>('[data-newsletter]');
+  const thanks = document.querySelector<HTMLElement>('[data-newsletter-thanks]');
+  if (form && thanks) {
+    enhanceForm(form, () => {
+      form.hidden = true;
+      thanks.hidden = false;
+    });
+  }
+</script>

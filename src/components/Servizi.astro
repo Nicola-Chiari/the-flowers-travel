@@ -1,0 +1,121 @@
+---
+import Img from './Img.astro';
+import { single } from '../lib/content';
+
+const s = await single('servizi');
+---
+
+<section id="servizi" class="services">
+  <p class="eyebrow eyebrow--pink">{s.eyebrow}</p>
+  <h2 class="section-title services__title">{s.title}</h2>
+  {s.intro && <p class="services__intro">{s.intro}</p>}
+  <div class="services__grid">
+    {
+      s.items.map((item) => (
+        <article class="services__card">
+          {item.icon ? (
+            <div class="services__icon">
+              <Img src={item.icon} alt="" widths={[140, 280]} sizes="140px" />
+            </div>
+          ) : (
+            <div class="services__icon placeholder" aria-hidden="true" />
+          )}
+          <h3>{item.title}</h3>
+          <p>{item.desc}</p>
+        </article>
+      ))
+    }
+  </div>
+  <div class="services__cta">
+    <a href="#contatti" class="btn btn--outline">{s.cta}</a>
+  </div>
+</section>
+
+<style>
+  .services {
+    padding: 100px var(--gutter);
+    background: var(--white);
+  }
+  .services__title {
+    margin-bottom: 16px;
+  }
+  .services__intro {
+    font-size: 19px;
+    line-height: 1.7;
+    color: var(--ink);
+    opacity: 0.7;
+    text-align: center;
+    max-width: 620px;
+    margin: 0 auto 64px;
+  }
+  .services__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 36px;
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+  .services__card {
+    border: 1px solid rgba(26, 26, 26, 0.1);
+    border-radius: var(--petal);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-height: 520px;
+    padding: 44px 34px;
+    gap: 24px;
+    transition:
+      transform var(--ease),
+      box-shadow var(--ease),
+      background var(--ease),
+      border-color var(--ease);
+  }
+  .services__card:hover {
+    box-shadow: var(--shadow-card);
+    background: rgba(125, 144, 144, 0.18);
+    border-color: var(--sage);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .services__card:hover {
+      transform: scale(1.05);
+    }
+  }
+  .services__icon {
+    width: 140px;
+    height: 140px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .services__icon :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .services__card h3 {
+    font-family: var(--font-title);
+    font-weight: 500;
+    font-size: 21px;
+    margin: 0;
+  }
+  .services__card p {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--ink);
+    opacity: 0.72;
+    margin: 0;
+  }
+  .services__cta {
+    text-align: center;
+    margin-top: 56px;
+  }
+  @media (max-width: 759px) {
+    .services__card {
+      min-height: 0;
+    }
+  }
+</style>
