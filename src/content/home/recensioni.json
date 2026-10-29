@@ -1,6 +1,7 @@
 {
   "eyebrow": "Chi ha viaggiato con me",
   "title": "Recensioni",
+  "subtitle": "Le parole di chi mi ha affidato il proprio viaggio",
   "items": [
     {
       "quote": "Ci ha ascoltati davvero, non ci ha venduto un pacchetto. Il viaggio in Giappone è stato esattamente come lo sognavamo.",
@@ -19,6 +20,16 @@
       "name": "Elena",
       "trip": "Viaggio di coppia, Portogallo",
       "stars": 5
+    },
+    {
+      "quote": "Tre generazioni in un unico viaggio e nessuno si è annoiato un minuto. Elena ha pensato davvero a tutti.",
+      "name": "Famiglia Bianchi",
+      "trip": "Viaggio in famiglia, Sicilia",
+      "stars": 5
     }
-  ]
+  ],
+  "inviteTitle": "Hai viaggiato con me?",
+  "inviteText": "La tua esperienza può aiutare altri viaggiatori a realizzare il loro sogno e a partire con fiducia",
+  "inviteButton": "Lascia la tua recensione su Google!",
+  "inviteLink": "https://www.google.com/search?q=The+Flowers+Travel+recensioni"
 }

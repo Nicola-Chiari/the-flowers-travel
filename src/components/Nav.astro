@@ -8,37 +8,92 @@ interface Props {
   /** Nelle pagine interne la nav è sempre visibile. */
   alwaysVisible?: boolean;
 }
-const { base = '', alwaysVisible = false } = Astro.props;
+const { base = '' } = Astro.props;
+const alwaysVisible = Astro.props.alwaysVisible ?? false;
 const ui = await single('ui');
 const site = await single('site');
-const seo = site.seo;
+
+// "#sezione" diventa "/#sezione" fuori dalla home; gli altri link restano come sono.
+const href = (link: string) => (link.startsWith('#') ? `${base}${link}` : link);
+const section = (link: string) => (link.startsWith('#') ? link.slice(1) : undefined);
 ---
 
-<nav class="nav" data-nav data-always={alwaysVisible ? '' : undefined} aria-label={seo.title}>
+<nav class="nav" data-nav data-always={alwaysVisible ? '' : undefined} aria-label={site.seo.title}>
   <a href={`${base}#hero`} class="nav__logo">
     <Img src={site.logoNav} alt="The Flowers Travel" widths={[120, 240]} sizes="120px" loading="eager" />
   </a>
-  <div class="nav__links" id="nav-links">
+
+  <ul class="nav__links">
     {
-      ui.nav.map((l) => (
-        <a href={`${base}#${l.target}`} data-nav-link={l.target}>
-          {l.label}
-        </a>
+      ui.nav.map((item) => (
+        <li class:list={['nav__item', { 'nav__item--parent': item.children.length > 0 }]}>
+          <a href={href(item.link)} class="nav__link wave-underline" data-nav-link={section(item.link)}>
+            {item.label}
+          </a>
+          {item.children.length > 0 && (
+            <ul class="nav__dropdown">
+              {item.children.map((child, i) => (
+                <li style={`--i: ${i}`}>
+                  <a href={href(child.link)}>{child.label}</a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </li>
       ))
     }
-  </div>
+  </ul>
+
   <button
-    class="nav__toggle"
+    class="nav__burger"
     type="button"
     aria-expanded="false"
-    aria-controls="nav-links"
+    aria-controls="nav-panel"
     data-label-open={ui.navMenuOpen}
     data-label-close={ui.navMenuClose}
     aria-label={ui.navMenuOpen}
   >
-    <span></span><span></span><span></span>
+    <svg width="26" height="20" viewBox="0 0 26 20" fill="none" stroke="#542833" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"
+      ><path d="M2 3 C 9 2.4, 17 3.4, 24 2.8"></path><path d="M2 10 C 9 10.6, 17 9.4, 24 10.2"></path><path
+        d="M2 17 C 9 16.4, 17 17.6, 24 17"></path></svg
+    >
   </button>
 </nav>
+
+<div class="nav-panel" id="nav-panel" data-nav-panel hidden>
+  <ul>
+    {
+      ui.nav.map((item, i) => (
+        <li class="nav-panel__row">
+          {item.children.length > 0 ? (
+            <>
+              <button type="button" class="nav-panel__link" aria-expanded="false" aria-controls={`nav-sub-${i}`} data-nav-sub>
+                <span>{item.label}</span>
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#542833" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 7 L9 12 L14 7" />
+                </svg>
+              </button>
+              <ul class="nav-panel__sub" id={`nav-sub-${i}`} hidden>
+                <li>
+                  <a href={href(item.link)}>{item.label}</a>
+                </li>
+                {item.children.map((child) => (
+                  <li>
+                    <a href={href(child.link)}>{child.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <a href={href(item.link)} class="nav-panel__link">
+              {item.label}
+            </a>
+          )}
+        </li>
+      ))
+    }
+  </ul>
+</div>
 
 <style>
   .nav {
@@ -50,10 +105,9 @@ const seo = site.seo;
     align-items: center;
     gap: 30px;
     padding: 18px 40px;
-    background: rgba(255, 255, 255, 0.35);
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: rgba(217, 190, 194, 0.42);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border-radius: 999px;
     box-shadow: var(--shadow-nav);
     flex-wrap: nowrap;
@@ -89,148 +143,249 @@ const seo = site.seo;
     gap: 22px;
     font-size: 18px;
     white-space: nowrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
-  .nav__links a {
-    color: var(--ink);
+  .nav__item {
+    position: relative;
+  }
+  .nav__link {
+    color: var(--plum);
     text-decoration: none;
-    opacity: 0.75;
     font-weight: 400;
     display: inline-block;
+    padding-bottom: 8px;
+    margin-bottom: -8px;
     transition:
       transform 0.2s ease,
       color 0.2s ease,
       font-weight 0.2s ease;
   }
-  .nav__links a:hover {
-    color: var(--blush);
-    font-weight: 600;
+  .nav__link:hover,
+  .nav__link:focus-visible {
+    font-weight: 700;
+    background-size: 100% 7px;
   }
-  .nav__links a.is-active {
-    color: var(--blush);
-    opacity: 1;
+  .nav__link.is-active {
     font-weight: 700;
   }
   @media (prefers-reduced-motion: no-preference) {
     .nav__logo:hover {
       transform: scale(1.12);
     }
-    .nav__links a:hover {
+    .nav__link:hover {
       transform: scale(1.1);
     }
   }
 
-  .nav__toggle {
+  /* Tendina: pillole che scendono una dopo l'altra */
+  .nav__dropdown {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 26px 0 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    pointer-events: none;
+    z-index: 60;
+  }
+  .nav__dropdown a {
+    display: block;
+    padding: 9px 20px;
+    border-radius: 999px;
+    background: rgba(246, 236, 238, 0.94);
+    color: var(--plum);
+    font-size: 15px;
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 0 6px 18px rgba(84, 40, 51, 0.14);
+    opacity: 0;
+    transform: translateY(-10px) scale(0.85);
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s ease,
+      background var(--ease);
+  }
+  .nav__dropdown a:hover {
+    background: var(--blush);
+  }
+  .nav__item--parent:hover .nav__dropdown,
+  .nav__item--parent:focus-within .nav__dropdown {
+    pointer-events: auto;
+  }
+  .nav__item--parent:hover .nav__dropdown a,
+  .nav__item--parent:focus-within .nav__dropdown a {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(var(--i) * 0.05s), calc(var(--i) * 0.05s), 0s;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .nav__item--parent:hover .nav__dropdown a:hover {
+      transform: scale(1.06);
+      transition-delay: 0s;
+    }
+  }
+
+  .nav__burger {
     display: none;
-    width: 40px;
-    height: 40px;
-    padding: 10px 8px;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  /* Pannello mobile */
+  .nav-panel {
+    position: fixed;
+    top: 84px;
+    left: 4vw;
+    right: 4vw;
+    z-index: 49;
+    background: rgba(246, 236, 238, 0.97);
+    border-radius: 28px;
+    padding: 10px 24px 14px;
+    box-shadow: 0 14px 40px rgba(84, 40, 51, 0.2);
+    max-height: calc(100vh - 110px);
+    max-height: calc(100dvh - 110px);
+    overflow-y: auto;
+  }
+  .nav-panel ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nav-panel__row {
+    border-bottom: 1px solid rgba(84, 40, 51, 0.12);
+  }
+  .nav-panel__row:last-child {
+    border-bottom: none;
+  }
+  .nav-panel__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 54px;
+    padding: 0;
     border: none;
     background: none;
+    color: var(--plum);
+    font-size: 19px;
+    font-family: var(--font-body);
+    text-align: left;
+    text-decoration: none;
     cursor: pointer;
+  }
+  .nav-panel__link svg {
+    transition: transform 0.2s ease;
+  }
+  .nav-panel__link[aria-expanded='true'] svg {
+    transform: rotate(180deg);
+  }
+  .nav-panel__sub {
+    display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 0 0 16px 10px !important;
   }
-  .nav__toggle span {
+  .nav-panel__sub[hidden] {
+    display: none;
+  }
+  .nav-panel__sub a {
     display: block;
-    height: 1.5px;
-    background: var(--ink);
-    border-radius: 2px;
-    transition:
-      transform 0.25s ease,
-      opacity 0.25s ease;
-  }
-  .nav__toggle[aria-expanded='true'] span:nth-child(1) {
-    transform: translateY(8.25px) rotate(45deg);
-  }
-  .nav__toggle[aria-expanded='true'] span:nth-child(2) {
-    opacity: 0;
-  }
-  .nav__toggle[aria-expanded='true'] span:nth-child(3) {
-    transform: translateY(-8.25px) rotate(-45deg);
+    padding: 10px 20px;
+    border-radius: 999px;
+    background: var(--rose);
+    color: var(--plum);
+    font-size: 16px;
+    text-decoration: none;
   }
 
   @media (max-width: 899px) {
-    .nav {
+    .nav,
+    .nav.is-visible {
+      transform: translateX(-50%);
+      opacity: 1;
+      pointer-events: auto;
       width: 92vw;
       justify-content: space-between;
-      padding: 12px 16px 12px 24px;
-    }
-    .nav__toggle {
-      display: flex;
+      padding: 10px 14px 10px 24px;
     }
     .nav__links {
-      position: absolute;
-      top: calc(100% + 10px);
-      left: 0;
-      right: 0;
-      flex-direction: column;
-      gap: 4px;
-      padding: 14px;
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(16px) saturate(180%);
-      -webkit-backdrop-filter: blur(16px) saturate(180%);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      border-radius: 24px;
-      box-shadow: var(--shadow-nav);
-      opacity: 0;
-      transform: translateY(-8px);
-      visibility: hidden;
-      transition:
-        opacity 0.25s ease,
-        transform 0.25s ease,
-        visibility 0.25s;
+      display: none;
     }
-    .nav.is-open .nav__links {
-      opacity: 1;
-      transform: none;
-      visibility: visible;
+    .nav__burger {
+      display: flex;
     }
-    .nav__links a {
-      padding: 12px 14px;
-      opacity: 0.85;
-    }
-    .nav__links a:hover {
-      transform: none;
+  }
+  @media (min-width: 900px) {
+    .nav-panel {
+      display: none;
     }
   }
 </style>
 
 <script>
   const nav = document.querySelector<HTMLElement>('[data-nav]');
-  if (nav) {
-    const toggle = nav.querySelector<HTMLButtonElement>('.nav__toggle')!;
+  const panel = document.querySelector<HTMLElement>('[data-nav-panel]');
+  if (nav && panel) {
+    const burger = nav.querySelector<HTMLButtonElement>('.nav__burger')!;
     const links = [...nav.querySelectorAll<HTMLAnchorElement>('[data-nav-link]')];
-    const sectionIds = [...document.querySelectorAll<HTMLElement>('main section[id]')].map((s) => s.id);
     const always = nav.hasAttribute('data-always');
+    const orderedIds = [...document.querySelectorAll<HTMLElement>('main section[id]')].map((s) => s.id);
 
     const setOpen = (open: boolean) => {
-      nav.classList.toggle('is-open', open);
-      toggle.setAttribute('aria-expanded', String(open));
-      toggle.setAttribute('aria-label', (open ? toggle.dataset.labelClose : toggle.dataset.labelOpen) || '');
+      panel.hidden = !open;
+      burger.setAttribute('aria-expanded', String(open));
+      burger.setAttribute('aria-label', (open ? burger.dataset.labelClose : burger.dataset.labelOpen) || '');
+      if (!open) {
+        panel.querySelectorAll<HTMLButtonElement>('[data-nav-sub]').forEach((b) => {
+          b.setAttribute('aria-expanded', 'false');
+          document.getElementById(b.getAttribute('aria-controls')!)!.hidden = true;
+        });
+      }
     };
-    toggle.addEventListener('click', () => setOpen(!nav.classList.contains('is-open')));
-    links.forEach((a) => a.addEventListener('click', () => setOpen(false)));
+    burger.addEventListener('click', () => setOpen(panel.hasAttribute('hidden')));
+    panel.querySelectorAll<HTMLButtonElement>('[data-nav-sub]').forEach((b) =>
+      b.addEventListener('click', () => {
+        const open = b.getAttribute('aria-expanded') !== 'true';
+        panel.querySelectorAll<HTMLButtonElement>('[data-nav-sub]').forEach((o) => {
+          o.setAttribute('aria-expanded', String(o === b && open));
+          document.getElementById(o.getAttribute('aria-controls')!)!.hidden = !(o === b && open);
+        });
+      }),
+    );
+    panel.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && nav.classList.contains('is-open')) {
+      if (e.key === 'Escape' && !panel.hidden) {
         setOpen(false);
-        toggle.focus();
+        burger.focus();
       }
     });
+    matchMedia('(min-width: 900px)').addEventListener('change', () => setOpen(false));
 
     let ticking = false;
     const update = () => {
       ticking = false;
-      if (!always) {
-        const visible = window.scrollY > 40;
-        nav.classList.toggle('is-visible', visible);
-        if (!visible) setOpen(false);
-      }
-      let current = sectionIds[0];
-      for (const id of sectionIds) {
+      if (!always) nav.classList.toggle('is-visible', window.scrollY > 40);
+      // Sezione attiva = l'ultima il cui bordo alto è sopra i 140px.
+      let current: string | undefined;
+      for (const id of orderedIds) {
         const el = document.getElementById(id);
-        if (el && el.offsetParent !== null && el.getBoundingClientRect().top <= 140) current = id;
+        if (el && el.getClientRects().length && el.getBoundingClientRect().top <= 140) current = id;
       }
-      links.forEach((a) => a.classList.toggle('is-active', a.dataset.navLink === current));
+      links.forEach((a) => a.classList.toggle('is-active', !!current && a.dataset.navLink === current));
     };
     window.addEventListener(
       'scroll',

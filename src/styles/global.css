@@ -51,36 +51,46 @@ textarea {
 /* Titoletti corsivi e titoli di sezione */
 .eyebrow {
   font-family: var(--font-script);
-  font-size: 46px;
-  letter-spacing: 0.02em;
-  font-weight: 600;
+  font-size: 58px;
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--plum);
   margin: 0 0 12px;
   text-align: center;
-}
-.eyebrow--pink {
-  color: var(--blush);
-}
-.eyebrow--muted {
-  color: var(--ink);
-  opacity: 0.6;
 }
 .section-title {
   font-family: var(--font-title);
   font-weight: 500;
   font-size: var(--h2-size);
+  line-height: 1.2;
   text-align: center;
   margin: 0;
+}
+.section-intro {
+  font-size: 19px;
+  line-height: 1.7;
+  text-align: center;
+  max-width: 620px;
+  margin: 0 auto;
 }
 
 /* Pulsanti a petalo */
 .btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
   text-decoration: none;
-  padding: 14px 30px;
-  font-size: 17px;
+  padding: 10px 20px;
+  font-size: 15.4px;
   letter-spacing: 0.03em;
+  border: 1px solid transparent;
+  border-radius: var(--petal-alt);
   cursor: pointer;
   transition: transform var(--ease), background var(--ease), color var(--ease);
+}
+.btn--alt {
+  border-radius: var(--petal);
 }
 @media (prefers-reduced-motion: no-preference) {
   .btn:hover {
@@ -90,26 +100,33 @@ textarea {
     transform: scale(0.97);
   }
 }
-.btn--fill {
-  background: var(--blush);
-  border: 1px solid var(--blush);
+.btn--plum {
+  background: var(--plum);
+  border-color: var(--plum);
   color: var(--white);
-  border-radius: var(--petal);
 }
-.btn--outline {
-  background: transparent;
-  border: 1px solid var(--blush);
-  color: var(--blush);
-  border-radius: var(--petal-alt);
-}
-.btn--outline:hover {
-  background: var(--blush);
+.btn--olive {
+  background: var(--olive);
+  border-color: var(--olive);
   color: var(--white);
+}
+.btn--blush {
+  background: var(--blush);
+  border-color: var(--blush);
+  color: var(--plum);
+}
+
+/* Onda dorata sotto i link e come separatore */
+.wave-underline {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpath d='M1 5 C 9 0, 17 0, 25 5 S 41 10, 50 5 S 66 0, 75 5 S 91 10, 99 5' fill='none' stroke='%23E6B84A' stroke-width='2.4' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: 0 7px;
 }
 
 /* Segnaposto per immagini mancanti */
 .placeholder {
-  background: repeating-linear-gradient(45deg, var(--sage) 0 16px, var(--blush) 16px 32px);
+  background: repeating-linear-gradient(45deg, var(--blush) 0 24px, var(--blush-light) 24px 48px);
 }
 
 /* Testo ricco dal CMS */
@@ -150,8 +167,13 @@ textarea {
   }
 }
 
+@media (max-width: 759px) {
+  .eyebrow {
+    font-size: 46px;
+  }
+}
 @media (max-width: 479px) {
   .eyebrow {
-    font-size: 38px;
+    font-size: 40px;
   }
 }

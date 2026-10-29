@@ -59,20 +59,17 @@ const site = defineCollection({
     email: z.email('Email non valida.'),
     whatsappNumber: z.string().regex(/^[0-9]{8,15}$/, 'Solo cifre, con prefisso internazionale, senza +.'),
     whatsappMessage: text,
-    vat: optionalText,
+    taxLabel: optionalText,
+    taxId: optionalText,
     logoNav: image(true),
     logoFooter: image(true),
-    divider: image(),
+    tagline: text,
     socials: z.object({
       instagram: optionalText,
-      facebook: optionalText,
       tiktok: optionalText,
+      facebook: optionalText,
       pinterest: optionalText,
     }),
-    footerTagline: text,
-    footerRight: text,
-    newsletterText: text,
-    newsletterThanks: text,
     seo: z.object({
       title: text,
       description: text.max(200, 'Massimo 200 caratteri (meglio 160).'),
@@ -81,59 +78,47 @@ const site = defineCollection({
   }),
 });
 
-const link = z.object({ label: text, target: text });
+const link = z.object({ label: text, link: text });
 
 const ui = defineCollection({
   loader: single('./src/content/settings', 'ui.json'),
   schema: z.object({
-    nav: z.array(link).min(1),
+    nav: z.array(link.extend({ children: optionalList(link) })).min(1),
     navMenuOpen: text,
     navMenuClose: text,
     heroScroll: text,
     carouselPrev: text,
     carouselNext: text,
-    close: text,
+    more: text,
     whatsapp: text,
     starsLabel: text,
     form: z.object({
-      nameLabel: text,
-      namePlaceholder: optionalText,
-      emailLabel: text,
-      emailPlaceholder: optionalText,
-      phoneLabel: text,
-      phonePlaceholder: optionalText,
+      name: text,
+      surname: text,
+      email: text,
+      phone: text,
+      message: text,
       consentBefore: optionalText,
       consentLink: text,
       consentAfter: optionalText,
       sending: text,
+      errorName: text,
       errorEmail: text,
+      errorMessage: text,
       errorConsent: text,
       errorSend: text,
       emailSubject: text,
     }),
-    channels: z.object({ phone: text, email: text }),
-    newsletter: z.object({
-      placeholder: text,
-      button: text,
-      consentBefore: optionalText,
-      consentLink: text,
-      consentAfter: optionalText,
-      errorSend: text,
-    }),
-    footer: z.object({
-      menuTitle: text,
-      linksTitle: text,
-      socialTitle: text,
-      menu: z.array(
-        link.extend({
-          emphasis: z.boolean().nullish().transform((v) => v ?? false),
-          indent: z.boolean().nullish().transform((v) => v ?? false),
-        }),
-      ),
-      privacy: text,
-      cookie: text,
-      copyright: text,
-      vatPrefix: text,
+    footer: z.object({ socialTitle: text, privacy: text, cookie: text, copyright: text }),
+    trip: z.object({
+      storyTitle: text,
+      itineraryTitle: text,
+      galleryTitle: text,
+      ctaTitle: text,
+      ctaText: text,
+      ctaButton: text,
+      othersTitle: text,
+      back: text,
     }),
     pages: z.object({
       updated: text,
@@ -142,7 +127,6 @@ const ui = defineCollection({
       thanksText: text,
       notFoundTitle: text,
       notFoundText: text,
-      storyBack: text,
       articleBack: text,
     }),
   }),
@@ -159,7 +143,6 @@ const hero = defineCollection({
     videoWebm: video(),
     poster: image(),
     logo: image(true),
-    signature: text,
     titleLine1: text,
     titleLine2: optionalText,
     subtitle: text,
@@ -176,10 +159,8 @@ const chiSono = defineCollection({
     photo: image(true),
     photoAlt: text,
     paragraphs: z.array(text).min(1),
-    whyTitle: text,
-    whyItems: optionalList(text),
-    valuesTitle: text,
-    valuesItems: optionalList(text),
+    cta: optionalText,
+    ctaLink: optionalText,
   }),
 });
 
@@ -189,8 +170,7 @@ const servizi = defineCollection({
     eyebrow: text,
     title: text,
     intro: optionalText,
-    items: z.array(z.object({ title: text, desc: text, icon: image() })),
-    cta: text,
+    items: z.array(z.object({ title: text, desc: text, icon: image(), link: optionalText })),
   }),
 });
 
@@ -200,6 +180,8 @@ const comeFunziona = defineCollection({
     eyebrow: text,
     title: text,
     steps: z.array(z.object({ title: text, desc: text, image: image() })),
+    cta: optionalText,
+    ctaLink: optionalText,
   }),
 });
 
@@ -208,9 +190,30 @@ const viaggiIntro = defineCollection({
   schema: z.object({
     eyebrow: text,
     title: text,
+    subtitle: optionalText,
     allLabel: text,
     categories: z.array(z.object({ name: text })).min(1),
-    modalCta: text,
+    ctaLabel: text,
+  }),
+});
+
+export const CONTINENT_ICONS = ['asia', 'africa', 'oceania', 'america', 'europa'] as const;
+
+const destinazioni = defineCollection({
+  loader: home('destinazioni.json'),
+  schema: z.object({
+    eyebrow: text,
+    title: text,
+    intro: optionalText,
+    items: optionalList(
+      z.object({
+        name: text,
+        image: image(),
+        imageAlt: optionalText,
+        icon: z.enum(CONTINENT_ICONS).nullish(),
+        link: optionalText,
+      }),
+    ),
   }),
 });
 
@@ -221,6 +224,8 @@ const feature = z.object({
   image: image(),
   imageAlt: optionalText,
   cta: text,
+  link: text,
+  filter: optionalText,
 });
 const nozze = defineCollection({ loader: home('nozze.json'), schema: feature });
 const famiglia = defineCollection({ loader: home('famiglia.json'), schema: feature });
@@ -235,24 +240,20 @@ const recensioni = defineCollection({
   schema: z.object({
     eyebrow: text,
     title: text,
+    subtitle: optionalText,
     items: optionalList(
       z.object({ quote: text, name: text, trip: optionalText, stars: z.number().int().min(1).max(5) }),
     ),
+    inviteTitle: optionalText,
+    inviteText: optionalText,
+    inviteButton: optionalText,
+    inviteLink: optionalText,
   }),
 });
 
 const contatti = defineCollection({
   loader: home('contatti.json'),
-  schema: z.object({
-    eyebrow: text,
-    title: text,
-    text: text,
-    openButton: text,
-    questions: optionalList(z.object({ label: text, placeholder: optionalText })),
-    submitButton: text,
-    successMessage: text,
-    otherChannels: text,
-  }),
+  schema: z.object({ title: text, text: text, submitButton: text, successMessage: text }),
 });
 
 /* ---------- Collezioni ---------- */
@@ -260,27 +261,16 @@ const contatti = defineCollection({
 const viaggi = defineCollection({
   loader: glob({ base: './src/content/viaggi', pattern: '*.md' }),
   schema: z.object({
+    people: optionalText,
     title: text,
     destination: text,
     duration: optionalText,
     category: text,
     cover: image(),
     coverAlt: optionalText,
+    stamp: image(),
     gallery: optionalList(z.object({ image: image(true), alt: optionalText })),
-    stamp: z
-      .object({
-        country: optionalText,
-        mark: optionalText,
-        value: optionalText,
-        year: z.union([z.string(), z.number()]).nullish(),
-      })
-      .nullish()
-      .transform((s) => ({
-        country: s?.country || 'Italia',
-        mark: s?.mark || 'TFT',
-        value: s?.value || '€ 1,20',
-        year: String(s?.year || new Date().getFullYear()),
-      })),
+    itinerary: optionalList(z.object({ day: optionalText, title: text, text: optionalText })),
     order: z.number().int().nullish().transform((v) => v ?? 10),
     published: z.boolean().nullish().transform((v) => v ?? true),
   }),
@@ -312,6 +302,7 @@ export const collections = {
   servizi,
   comeFunziona,
   viaggiIntro,
+  destinazioni,
   nozze,
   famiglia,
   consigli,

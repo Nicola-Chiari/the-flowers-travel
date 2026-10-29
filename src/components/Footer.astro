@@ -1,122 +1,92 @@
 ---
 import Img from './Img.astro';
 import SocialIcon from './SocialIcon.astro';
+import WaveEdge from './WaveEdge.astro';
 import { single } from '../lib/content';
-import { getVisibleSections } from '../lib/sections';
 
-interface Props {
-  base?: string;
-}
-const { base = '' } = Astro.props;
 const site = await single('site');
 const ui = await single('ui');
-const { isVisible } = await getVisibleSections();
-const menu = ui.footer.menu.filter((m) => isVisible(m.target));
-const socialLabels = { instagram: 'Instagram', facebook: 'Facebook', tiktok: 'TikTok', pinterest: 'Pinterest' } as const;
+const socialLabels = { instagram: 'Instagram', tiktok: 'TikTok', facebook: 'Facebook', pinterest: 'Pinterest' } as const;
 const socials = (Object.keys(socialLabels) as (keyof typeof socialLabels)[])
   .map((key) => ({ key, label: socialLabels[key], url: site.socials[key] }))
   .filter((s) => s.url);
 const year = new Date().getFullYear();
 const [copyBefore, copyAfter = ''] = ui.footer.copyright.split('{anno}');
-const nl = ui.newsletter;
+const divider = 'M8 2 C 0 12, 0 22, 8 32 S 16 52, 8 62 S 0 82, 8 92 S 16 112, 8 118';
 ---
 
 <footer class="footer">
-  <div class="footer__grid">
-    <div>
+  <WaveEdge position="top" color="#6b7860" />
+  <div class="footer__row">
+    <div class="footer__brand">
       <Img src={site.logoFooter} alt="The Flowers Travel" class="footer__logo" widths={[200, 400]} sizes="195px" />
-      <p class="footer__tagline">{site.footerTagline}</p>
+      <p class="footer__tagline">{site.tagline}</p>
     </div>
-
-    <nav class="footer__col" aria-label={ui.footer.menuTitle}>
-      <p class="footer__heading">{ui.footer.menuTitle}</p>
+    <svg class="footer__divider" width="16" height="120" viewBox="0 0 16 120" fill="none" aria-hidden="true"
+      ><path d={divider} stroke="#d9bec2" stroke-width="3" stroke-linecap="round"></path></svg
+    >
+    <div class="footer__info">
       {
-        menu.map((m) => (
-          <a
-            href={`${base}#${m.target}`}
-            class:list={['footer__link', { 'footer__link--strong': m.emphasis, 'footer__link--indent': m.indent }]}
-          >
-            {m.label}
-          </a>
-        ))
+        site.taxId && (
+          <p>
+            {site.taxLabel && <span>{site.taxLabel}</span>} {site.taxId}
+          </p>
+        )
       }
-    </nav>
-
-    <div class="footer__col">
-      <p class="footer__heading">{ui.footer.linksTitle}</p>
-      <a href="/privacy" class="footer__link">{ui.footer.privacy}</a>
-      <a href="/cookie" class="footer__link">{ui.footer.cookie}</a>
+      <a href={`mailto:${site.email}`}>{site.email}</a>
     </div>
-
-    <div>
-      {
-        socials.length > 0 && (
-          <>
-            <p class="footer__heading footer__heading--social">{ui.footer.socialTitle}</p>
-            <div class="footer__socials">
+    {
+      socials.length > 0 && (
+        <>
+          <svg class="footer__divider" width="16" height="120" viewBox="0 0 16 120" fill="none" aria-hidden="true">
+            <path d={divider} stroke="#d9bec2" stroke-width="3" stroke-linecap="round" />
+          </svg>
+          <div class="footer__social">
+            <p class="footer__social-title">{ui.footer.socialTitle}</p>
+            <div class="footer__icons">
               {socials.map((s) => (
-                <a href={s.url} target="_blank" rel="noopener" aria-label={s.label} class="footer__social">
+                <a href={s.url} target="_blank" rel="noopener" aria-label={s.label}>
                   <SocialIcon name={s.key} />
                 </a>
               ))}
             </div>
-          </>
-        )
-      }
-      <p class="footer__nl-text">{site.newsletterText}</p>
-      <form
-        class="footer__nl"
-        name="newsletter"
-        method="POST"
-        action="/grazie"
-        data-netlify="true"
-        netlify-honeypot="bot-field"
-        data-newsletter
-        data-error-email={ui.form.errorEmail}
-        data-error-consent={ui.form.errorConsent}
-        data-error-send={nl.errorSend}
-        data-sending={ui.form.sending}
-      >
-        <input type="hidden" name="form-name" value="newsletter" />
-        <p class="sr-only" aria-hidden="true">
-          <label>Bot <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
-        </p>
-        <div class="footer__nl-row">
-          <label class="sr-only" for="nl-email">{nl.placeholder}</label>
-          <input id="nl-email" type="email" name="email" required autocomplete="email" placeholder={nl.placeholder} />
-          <button type="submit">{nl.button}</button>
-        </div>
-        <label class="footer__nl-consent">
-          <input type="checkbox" name="privacy" value="sì" required />
-          <span>{nl.consentBefore}<a href="/privacy">{nl.consentLink}</a>{nl.consentAfter}</span>
-        </label>
-        <p class="footer__nl-error" data-form-status role="alert" hidden></p>
-      </form>
-      <p class="footer__nl-thanks" data-newsletter-thanks role="status" hidden>{site.newsletterThanks}</p>
-    </div>
+          </div>
+        </>
+      )
+    }
   </div>
 
   <div class="footer__bottom">
-    <p>
-      {copyBefore}<span data-year>{year}</span>{copyAfter}
-      {site.vat && <span class="footer__vat">{ui.footer.vatPrefix} {site.vat}</span>}
-    </p>
-    <p>{site.footerRight}</p>
+    <p>{copyBefore}<span data-year>{year}</span>{copyAfter}</p>
+    <div class="footer__legal">
+      <a href="/privacy">{ui.footer.privacy}</a>
+      <a href="/cookie">{ui.footer.cookie}</a>
+    </div>
   </div>
 </footer>
 
 <style>
   .footer {
+    position: relative;
+    z-index: 1;
     padding: 90px var(--gutter) 40px;
-    background: var(--sage);
+    background: var(--olive);
     color: var(--white);
   }
-  .footer__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 48px;
+  .footer__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
     max-width: 1200px;
     margin: 0 auto 64px;
+  }
+  .footer__brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
   .footer :global(.footer__logo) {
     height: 65px;
@@ -126,148 +96,70 @@ const nl = ui.newsletter;
     display: block;
   }
   .footer__tagline {
-    font-size: 17px;
-    line-height: 1.6;
-    opacity: 0.65;
-    max-width: 240px;
+    font-family: var(--font-script);
+    font-size: 34px;
+    line-height: 1.2;
     margin: 0;
   }
-  .footer__col {
+  .footer__divider {
+    display: block;
+    flex: 0 0 auto;
+  }
+  .footer__info {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 14px;
-    font-size: 18px;
+    gap: 10px;
+    font-size: 17px;
   }
-  .footer__heading {
-    font-family: var(--font-title);
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--ink);
-    margin: 0 0 4px;
+  .footer__info p {
+    margin: 0;
   }
-  .footer__heading--social {
-    margin-bottom: 16px;
-  }
-  .footer__link {
+  .footer__info a {
     color: var(--white);
     text-decoration: none;
-    opacity: 0.8;
   }
-  .footer__link:hover {
-    opacity: 1;
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
-  .footer__link--strong {
-    opacity: 1;
-    font-weight: 500;
-  }
-  .footer__link--indent {
-    padding-left: 14px;
-    border-left: 1px solid rgba(255, 255, 255, 0.2);
-  }
-  .footer__socials {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 20px;
+  .footer__info a:hover {
+    color: var(--blush);
   }
   .footer__social {
-    width: 38px;
-    height: 38px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    align-self: flex-end;
+  }
+  .footer__social-title {
+    margin: 0;
+    font-family: var(--font-script);
+    font-size: 34px;
+    line-height: 1.1;
+    position: relative;
+    top: -10px;
+  }
+  .footer__icons {
+    display: flex;
+    gap: 12px;
+  }
+  .footer__icons a {
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
-    border: 1px solid var(--white);
+    border: 1.5px solid var(--plum);
+    color: var(--plum);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--white);
     transition:
-      transform var(--ease),
       background var(--ease),
-      border-color var(--ease);
+      transform var(--ease);
   }
-  .footer__social:hover {
+  .footer__icons a:hover {
     background: var(--blush);
-    border-color: var(--blush);
   }
   @media (prefers-reduced-motion: no-preference) {
-    .footer__social:hover {
-      transform: scale(1.1);
+    .footer__icons a:hover {
+      transform: scale(1.08);
     }
-  }
-  .footer__nl-text {
-    font-size: 17px;
-    line-height: 1.6;
-    opacity: 0.65;
-    max-width: 220px;
-    margin: 0 0 16px;
-  }
-  .footer__nl {
-    max-width: 260px;
-  }
-  .footer__nl-row {
-    display: flex;
-    gap: 8px;
-  }
-  .footer__nl-row input {
-    flex: 1;
-    min-width: 0;
-    padding: 10px 12px;
-    border: 1px solid var(--white);
-    border-radius: 0;
-    background: transparent;
-    color: var(--white);
-    font-family: var(--font-body);
-    font-size: 16px;
-  }
-  .footer__nl-row input::placeholder {
-    color: rgba(255, 255, 255, 0.75);
-  }
-  .footer__nl-row button {
-    padding: 10px 16px;
-    border: none;
-    background: var(--ink);
-    color: var(--white);
-    font-size: 16px;
-    cursor: pointer;
-    transition: transform var(--ease);
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    .footer__nl-row button:hover {
-      transform: scale(1.06);
-    }
-  }
-  .footer__nl-consent {
-    display: flex;
-    gap: 8px;
-    align-items: flex-start;
-    margin-top: 10px;
-    font-size: 13px;
-    line-height: 1.45;
-    opacity: 0.8;
-  }
-  .footer__nl-consent input {
-    margin: 2px 0 0;
-    flex-shrink: 0;
-    accent-color: var(--ink);
-  }
-  .footer__nl-consent a {
-    color: var(--white);
-  }
-  .footer__nl [aria-invalid='true'] {
-    outline: 2px solid var(--blush);
-  }
-  .footer__nl-error {
-    margin: 8px 0 0;
-    font-size: 14px;
-    color: var(--ink);
-  }
-  .footer__nl-thanks {
-    font-size: 16px;
-    color: var(--white);
-    margin: 0;
   }
   .footer__bottom {
     max-width: 1200px;
@@ -284,22 +176,40 @@ const nl = ui.newsletter;
   .footer__bottom p {
     margin: 0;
   }
-  .footer__vat::before {
-    content: ' · ';
+  .footer__legal {
+    display: flex;
+    gap: 24px;
+  }
+  .footer__legal a {
+    color: var(--white);
+    text-decoration: none;
+  }
+  .footer__legal a:hover {
+    text-decoration: underline;
+  }
+  @media (max-width: 759px) {
+    .footer__row {
+      flex-direction: column;
+      gap: 28px;
+    }
+    .footer__divider {
+      display: none;
+    }
+    .footer__info {
+      align-items: center;
+      text-align: center;
+    }
+    .footer__social {
+      align-self: center;
+    }
+    .footer__bottom {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
   }
 </style>
 
 <script>
-  import { enhanceForm } from '../scripts/forms';
-
   document.querySelectorAll<HTMLElement>('[data-year]').forEach((el) => (el.textContent = String(new Date().getFullYear())));
-
-  const form = document.querySelector<HTMLFormElement>('[data-newsletter]');
-  const thanks = document.querySelector<HTMLElement>('[data-newsletter-thanks]');
-  if (form && thanks) {
-    enhanceForm(form, () => {
-      form.hidden = true;
-      thanks.hidden = false;
-    });
-  }
 </script>

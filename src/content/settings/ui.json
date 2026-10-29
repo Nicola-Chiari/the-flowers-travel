@@ -1,28 +1,72 @@
 {
   "nav": [
     {
-      "label": "Come funziona",
-      "target": "come-funziona"
+      "label": "Destinazioni",
+      "link": "#destinazioni",
+      "children": [
+        {
+          "label": "Asia",
+          "link": "#destinazioni"
+        },
+        {
+          "label": "Africa",
+          "link": "#destinazioni"
+        },
+        {
+          "label": "Oceania",
+          "link": "#destinazioni"
+        },
+        {
+          "label": "America",
+          "link": "#destinazioni"
+        },
+        {
+          "label": "Europa",
+          "link": "#destinazioni"
+        }
+      ]
     },
     {
-      "label": "Viaggi",
-      "target": "viaggi"
+      "label": "Servizi",
+      "link": "#servizi",
+      "children": [
+        {
+          "label": "Viaggi su misura",
+          "link": "#servizi"
+        },
+        {
+          "label": "Fai da te, ma con guida",
+          "link": "#servizi"
+        },
+        {
+          "label": "Viaggi selezionati",
+          "link": "#servizi"
+        },
+        {
+          "label": "Come funziona",
+          "link": "#come-funziona"
+        }
+      ]
     },
     {
       "label": "Nozze",
-      "target": "nozze"
+      "link": "#nozze",
+      "children": []
     },
     {
       "label": "Famiglia",
-      "target": "famiglia"
+      "link": "#famiglia",
+      "children": []
     },
     {
       "label": "Chi sono",
-      "target": "chi-sono"
+      "link": "#chi-sono",
+      "children": []
     },
     {
       "label": "Contatti",
-      "target": "contatti"
+      "link": "#contatti",
+      "children": []
     }
   ],
   "navMenuOpen": "Apri il menu",
@@ -30,100 +74,41 @@
   "heroScroll": "Scorri per scoprire di più",
   "carouselPrev": "Viaggio precedente",
   "carouselNext": "Viaggio successivo",
-  "close": "Chiudi",
+  "more": "Scopri di più!",
   "whatsapp": "Scrivimi su WhatsApp",
+  "starsLabel": "{n} stelle su 5",
   "form": {
-    "nameLabel": "Nome",
-    "namePlaceholder": "Come ti chiami?",
-    "emailLabel": "Email",
-    "emailPlaceholder": "La tua email",
-    "phoneLabel": "Telefono (facoltativo)",
-    "phonePlaceholder": "Per richiamarti, se preferisci",
-    "consentBefore": "Ho letto l'",
+    "name": "Nome",
+    "surname": "Cognome",
+    "email": "Email",
+    "phone": "Telefono",
+    "message": "Scrivi qui il tuo messaggio…",
+    "consentBefore": "Dichiaro di accettare l'",
     "consentLink": "informativa privacy",
-    "consentAfter": " e acconsento al trattamento dei miei dati per ricevere una risposta.",
+    "consentAfter": "",
     "sending": "Invio in corso…",
+    "errorName": "Inserisci il tuo nome.",
     "errorEmail": "Inserisci un indirizzo email valido.",
-    "errorConsent": "Per inviare la richiesta serve il consenso privacy.",
+    "errorMessage": "Scrivi il tuo messaggio.",
+    "errorConsent": "Accetta l'informativa privacy per continuare.",
     "errorSend": "Non sono riuscita a ricevere il messaggio. Riprova, oppure scrivimi direttamente via email.",
     "emailSubject": "Nuova richiesta di viaggio dal sito"
   },
-  "channels": {
-    "phone": "Telefono",
-    "email": "Email"
-  },
-  "newsletter": {
-    "placeholder": "La tua email",
-    "button": "Iscriviti",
-    "consentBefore": "Acconsento a ricevere la newsletter (",
-    "consentLink": "privacy",
-    "consentAfter": ").",
-    "errorSend": "Iscrizione non riuscita, riprova tra poco."
-  },
   "footer": {
-    "menuTitle": "Menu",
-    "linksTitle": "Link utili",
-    "socialTitle": "Social",
-    "menu": [
-      {
-        "label": "Home",
-        "target": "hero",
-        "emphasis": false,
-        "indent": false
-      },
-      {
-        "label": "Chi sono",
-        "target": "chi-sono",
-        "emphasis": true,
-        "indent": false
-      },
-      {
-        "label": "Servizi",
-        "target": "servizi",
-        "emphasis": false,
-        "indent": false
-      },
-      {
-        "label": "Viaggi realizzati",
-        "target": "viaggi",
-        "emphasis": true,
-        "indent": false
-      },
-      {
-        "label": "Nozze",
-        "target": "nozze",
-        "emphasis": false,
-        "indent": true
-      },
-      {
-        "label": "Famiglia",
-        "target": "famiglia",
-        "emphasis": false,
-        "indent": true
-      },
-      {
-        "label": "Consigli",
-        "target": "consigli",
-        "emphasis": false,
-        "indent": false
-      },
-      {
-        "label": "Recensioni",
-        "target": "recensioni",
-        "emphasis": false,
-        "indent": false
-      },
-      {
-        "label": "Contatti",
-        "target": "contatti",
-        "emphasis": false,
-        "indent": false
-      }
-    ],
+    "socialTitle": "Seguimi sui social",
     "privacy": "Privacy Policy",
-    "cookie": "Cookie",
-    "copyright": "© {anno} The Flowers Travel. Tutti i diritti riservati.",
-    "vatPrefix": "P.IVA"
+    "cookie": "Cookie Policy",
+    "copyright": "© {anno} The Flowers Travel. Tutti i diritti riservati."
+  },
+  "trip": {
+    "storyTitle": "Il racconto",
+    "itineraryTitle": "Le tappe",
+    "galleryTitle": "Le foto del viaggio",
+    "ctaTitle": "Vorresti un viaggio così?",
+    "ctaText": "Raccontami cosa sogni: costruiamo insieme un itinerario pensato solo per te.",
+    "ctaButton": "Raccontami il tuo viaggio",
+    "othersTitle": "Altri viaggi",
+    "back": "Tutti i viaggi"
   },
   "pages": {
     "updated": "Ultimo aggiornamento:",
@@ -132,8 +117,6 @@
     "thanksText": "Ho ricevuto il tuo messaggio, ti rispondo entro 24 ore.",
     "notFoundTitle": "Questa pagina non esiste",
     "notFoundText": "Forse il link è cambiato. Torna alla home e riparti da lì.",
-    "storyBack": "Tutti i viaggi",
     "articleBack": "Tutti i consigli"
-  },
-  "starsLabel": "{n} stelle su 5"
+  }
 }

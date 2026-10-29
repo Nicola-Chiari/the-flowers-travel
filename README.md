@@ -33,8 +33,11 @@ src/styles/tokens.css  colori, font, raggi, ombre
 
 - **Un campo nuovo va aggiunto in due posti**: `public/admin/config.yml` (cosa vede Elena) e `src/content.config.ts` (cosa accetta la build). Se non coincidono la build si ferma con un errore che indica file e campo, e Netlify lascia online la versione precedente.
 - **Media**: Decap salva i file in `src/assets/uploads/` e scrive nei contenuti il percorso `/src/assets/uploads/nome.jpg`. `src/lib/media.ts` lo collega al file vero, così `astro:assets` può ridimensionarlo. Gli originali vengono copiati anche in `dist/src/assets/uploads/` (integrazione in `astro.config.mjs`) solo per le anteprime nel CMS.
-- **Sezioni opzionali**: Viaggi, Consigli e Recensioni spariscono (anche da menu e footer) quando non hanno contenuti pubblicati. Logica in `src/lib/sections.ts`.
-- **Foto in "Chi sono"**: `[[foto]]` nel titolo e `[[/foto]]` in un paragrafo segnano il bordo alto e basso della foto. Senza marcatori la foto prende l'altezza del testo.
+- **Sezioni opzionali**: Viaggi, Destinazioni, Consigli e Recensioni spariscono quando non hanno contenuti pubblicati. Logica in `src/lib/sections.ts`.
+- **"Chi sono"**: `[[testo]]` nel titoletto = parte sottolineata dall'onda dorata; `[[foto]]` nel titolo e `[[/foto]]` in un paragrafo = area in cui si centra la foto. Senza marcatori la foto prende l'altezza del testo.
+- **Pagine viaggio**: `src/pages/viaggi/[slug].astro` genera una pagina per ogni file in `src/content/viaggi/`. La cartolina (`Postcard.astro`) è condivisa tra carosello e "Altri viaggi" (variante `compact`).
+- **Filtro dai pulsanti**: un link con `data-trip-filter="Categoria"` (es. "Scopri i viaggi di nozze") imposta il filtro del carosello. Nel CMS è il campo "Categoria da mostrare nei viaggi".
+- **Link a pagine future**: menu, servizi, destinazioni e "Scopri la mia storia" hanno link modificabili dal CMS. Oggi puntano alle sezioni della home (o sono vuoti) perché le pagine dedicate non esistono ancora.
 - I font sono self-hosted (pacchetti `@fontsource`), niente Google Fonts.
 
 ## Messa online (una volta sola)
@@ -49,15 +52,18 @@ src/styles/tokens.css  colori, font, raggi, ombre
 5. **Dominio**: *Domain management → Add domain*. Dal registrar: record `A` del dominio nudo verso `75.2.60.5` e `CNAME` di `www` verso `<sito>.netlify.app` (oppure delega i nameserver a Netlify). HTTPS si attiva da solo; imposta il dominio principale, e `www` reindirizza lì.
 6. Il sito usa la variabile `URL` di Netlify per canonical, sitemap e Open Graph: dopo aver collegato il dominio fai un nuovo deploy.
 
-## Newsletter
+## Moduli
 
-Oggi le iscrizioni finiscono in Netlify Forms (da esportare a mano in CSV). Per passare a Brevo o Mailchimp aggiungi un provider in `src/scripts/forms.ts` e metti `data-provider="<nome>"` sul form in `src/components/Footer.astro`.
+Il modulo contatti invia a Netlify Forms (`contatto`). Per collegare un altro servizio aggiungi un provider in `src/scripts/forms.ts` e metti `data-provider="<nome>"` sul form. La newsletter del primo design è stata tolta perché non c'è nel nuovo.
 
 ## Da completare prima del lancio
 
-- [ ] Partita IVA (Impostazioni sito).
+- [ ] Codice fiscale / Partita IVA (Impostazioni sito → Dato fiscale): oggi vuoto, quindi nascosto.
+- [ ] Immagini del nuovo design non ancora caricate: logo bordeaux (nav), logo chiaro del footer, foto Famiglia (`famiglia.jpg`), francobolli e foto dei viaggi, foto delle destinazioni, icone servizi.
+- [ ] Testo di esempio nel viaggio "Aicha e Nicola" (racconto e tappe): va sostituito con quello vero.
+- [ ] Link "Lascia la tua recensione su Google": oggi è una ricerca Google, va sostituito con il link recensioni della scheda Google Business.
 - [ ] Testo della Privacy Policy (Pagine → Privacy Policy): oggi è un segnaposto.
 - [ ] Verificare il testo della pagina Cookie: vale finché non si aggiungono statistiche o pixel.
 - [ ] Recensioni e viaggi: quelli attuali vengono dal prototipo. Vanno sostituiti con storie e recensioni vere (o nascosti).
 - [ ] Verificare che i quattro profili social esistano davvero (un campo vuoto nasconde l'icona).
-- [ ] Immagini mancanti: icone servizi, illustrazioni passi 3–4, foto Nozze e Famiglia, foto dei viaggi.
+- [ ] Illustrazioni dei passi 3–4 e foto Nozze.

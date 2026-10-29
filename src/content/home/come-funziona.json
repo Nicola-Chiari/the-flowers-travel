@@ -8,7 +8,7 @@
       "image": "/src/assets/uploads/racconti-viaggio.png"
     },
     {
-      "title": "Prima chiamata gratuita",
+      "title": "Prima chiamata",
       "desc": "Parliamo a voce, senza impegno, per capirci davvero.",
       "image": "/src/assets/uploads/prima-chiamata.png"
     },
@@ -22,5 +22,7 @@
       "desc": "Mi occupo di tutto: voi pensate solo a viverlo.",
       "image": ""
     }
-  ]
+  ],
+  "cta": "Richiedi il tuo preventivo",
+  "ctaLink": "#contatti"
 }

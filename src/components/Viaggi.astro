@@ -1,166 +1,116 @@
 ---
-import { render } from 'astro:content';
-import Img from './Img.astro';
-import Stamp from './Stamp.astro';
+import Postcard from './Postcard.astro';
+import WaveEdge from './WaveEdge.astro';
 import { getViaggi, single } from '../lib/content';
 
 const intro = await single('viaggiIntro');
 const ui = await single('ui');
+const site = await single('site');
 const viaggi = await getViaggi();
 const used = new Set(viaggi.map((v) => v.data.category));
 const categories = intro.categories.map((c) => c.name).filter((name) => used.has(name));
-const stories = await Promise.all(
-  viaggi.map(async (v) => {
-    const { Content } = await render(v);
-    const images = [
-      ...(v.data.cover ? [{ image: v.data.cover, alt: v.data.coverAlt || v.data.title }] : []),
-      ...v.data.gallery.map((g) => ({ image: g.image, alt: g.alt || v.data.title })),
-    ];
-    return { id: v.id, data: v.data, Content, images };
-  }),
-);
-const place = (d: { destination: string; duration: string }) =>
-  [d.destination, d.duration].filter(Boolean).join(', ');
+const plane =
+  'M8.2 0.1 C 4 -0.9, -3.8 -0.5, -7.9 0.2 C -4.1 0.9, 4.2 0.8, 8.2 0.1 M2.6 -0.5 L -0.6 -6.4 L -2.4 -6.1 L -1.3 -0.6 M2.4 0.6 L -0.9 6.2 L -2.6 5.8 L -1.2 0.7 M-5.6 -0.3 L -7.4 -3.3 L -8.4 -3 L -7.6 -0.1 M-5.5 0.5 L -7.5 3.4 L -8.5 3 L -7.5 0.4';
+const REPEAT = 16;
 ---
 
 <section id="viaggi" class="trips">
-  <p class="eyebrow eyebrow--muted">{intro.eyebrow}</p>
-  <h2 class="section-title trips__title">{intro.title}</h2>
+  <WaveEdge position="top" color="#6b7860" />
+  <WaveEdge position="bottom" color="#6b7860" />
 
-  <div class="trips__filters" role="group" aria-label={intro.title}>
-    {
-      [intro.allLabel, ...categories].map((label, i) => (
-        <button type="button" class="trips__filter" data-filter={i === 0 ? '' : label} aria-pressed={i === 0 ? 'true' : 'false'}>
-          {label}
-        </button>
-      ))
-    }
+  <div class="trips__head">
+    <p class="eyebrow">{intro.eyebrow}</p>
+    <h2 class="section-title trips__title">{intro.title}</h2>
+    {intro.subtitle && <p class="section-intro trips__subtitle">{intro.subtitle}</p>}
+    <div class="trips__filters" role="group" aria-label={intro.title}>
+      {
+        [intro.allLabel, ...categories].map((label, i) => (
+          <button type="button" class="trips__filter" data-filter={i === 0 ? '' : label} aria-pressed={i === 0 ? 'true' : 'false'}>
+            {label}
+          </button>
+        ))
+      }
+    </div>
   </div>
 
   <div class="trips__carousel">
     <button type="button" class="trips__arrow trips__arrow--prev" data-dir="-1" aria-label={ui.carouselPrev}>
       <svg width="46" height="20" viewBox="0 0 46 20" fill="none" aria-hidden="true"
-        ><path
-          d="M45 10H2M2 10L12 2M2 10L12 18"
-          stroke="#1A1A1A"
-          stroke-width="1"
-          stroke-linecap="round"
-          stroke-linejoin="round"></path></svg
+        ><path d="M45 10 Q 41.5 6 38 10 T 31 10 T 24 10 T 17 10 T 10 10 T 3 10" stroke="#E6B84A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        ></path><path d="M2 10L11 3M2 10L11 17" stroke="#E6B84A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg
       >
     </button>
     <button type="button" class="trips__arrow trips__arrow--next" data-dir="1" aria-label={ui.carouselNext}>
       <svg width="46" height="20" viewBox="0 0 46 20" fill="none" aria-hidden="true"
-        ><path
-          d="M1 10H44M44 10L34 2M44 10L34 18"
-          stroke="#1A1A1A"
-          stroke-width="1"
-          stroke-linecap="round"
-          stroke-linejoin="round"></path></svg
+        ><path d="M1 10 Q 4.5 6 8 10 T 15 10 T 22 10 T 29 10 T 36 10 T 43 10" stroke="#E6B84A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        ></path><path d="M44 10L35 3M44 10L35 17" stroke="#E6B84A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg
       >
     </button>
 
     <div class="trips__rail" data-rail tabindex="0" aria-label={intro.title}>
       {
-        stories.map(({ id, data }, i) => (
-          <div class="trips__slide" data-category={data.category}>
-            <a href={`/viaggi/${id}`} class="postcard" data-story-open={id}>
-              <Stamp {...data.stamp} class="postcard__stamp" />
-              {data.cover ? (
-                <Img
-                  src={data.cover}
-                  alt={data.coverAlt || data.title}
-                  class="postcard__photo"
-                  widths={[480, 800, 1068]}
-                  sizes="(max-width: 759px) 88vw, 534px"
-                  loading={i === 0 ? 'eager' : 'lazy'}
-                />
-              ) : (
-                <div class="postcard__photo postcard__photo--empty" />
-              )}
-              <div class="postcard__text">
-                <p class="postcard__category">{data.category}</p>
-                <h3 class="postcard__title">{data.title}</h3>
-                <p class="postcard__place">{place(data)}</p>
-              </div>
-            </a>
+        viaggi.map((trip, i) => (
+          <div class="trips__slide" data-category={trip.data.category}>
+            <Postcard trip={trip} eager={i === 0} sideWaves />
           </div>
         ))
       }
     </div>
   </div>
 
-  {
-    stories.map(({ id, data, Content, images }) => (
-      <template data-story={id}>
-        {images.length === 0 ? (
-          <div class="story__media story__media--empty" />
-        ) : (
-          <div class="story__media" data-gallery>
-            <div class="story__strip" data-gallery-strip>
-              {images.map((img) => (
-                <Img src={img.image} alt={img.alt} widths={[640, 1280]} sizes="(max-width: 700px) 100vw, 640px" />
-              ))}
-            </div>
-            {images.length > 1 && (
-              <>
-                <button type="button" class="story__nav story__nav--prev" data-gallery-dir="-1" aria-label={ui.carouselPrev}>
-                  ‹
-                </button>
-                <button type="button" class="story__nav story__nav--next" data-gallery-dir="1" aria-label={ui.carouselNext}>
-                  ›
-                </button>
-              </>
-            )}
-          </div>
-        )}
-        <div class="story__body">
-          <p class="story__category">{data.category}</p>
-          <h3 class="story__title" id="story-modal-title">
-            {data.title}
-          </h3>
-          <p class="story__place">{place(data)}</p>
-          <div class="story__text prose">
-            <Content />
-          </div>
-          <a href="#contatti" class="story__cta" data-story-cta>
-            {intro.modalCta}
-          </a>
-        </div>
-      </template>
-    ))
-  }
-
-  <dialog class="story-modal" data-story-modal aria-labelledby="story-modal-title">
-    <div class="story-modal__box">
-      <button type="button" class="story-modal__close" data-story-close aria-label={ui.close}>×</button>
-      <div data-story-content></div>
-    </div>
-  </dialog>
+  <svg class="trips__ribbon" viewBox="0 0 1440 120" aria-hidden="true" data-ribbon>
+    <path
+      id="tft-ribbon-path"
+      d="M-60,58 C90,74 200,78 360,56 C540,34 720,38 900,62 C1080,86 1260,82 1500,58"
+      stroke="#FFFFFF"
+      stroke-width="63"
+      fill="none"
+      stroke-linecap="butt"></path>
+    <text class="trips__ribbon-text" dominant-baseline="central"
+      ><textPath href="#tft-ribbon-path" startOffset="0" data-ribbon-text
+        >{Array.from({ length: REPEAT }, (_, i) => <tspan dx={i === 0 ? undefined : 76}>{site.tagline}</tspan>)}</textPath
+      ></text
+    >
+    <g data-ribbon-planes fill="none" stroke="#542833" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      {Array.from({ length: REPEAT }, () => <path visibility="hidden" d={plane} />)}
+    </g>
+  </svg>
 </section>
 
 <style>
   .trips {
-    padding: 100px var(--gutter);
-    background: var(--sage-dark);
+    position: relative;
+    z-index: 1;
+    padding: 100px var(--gutter) 120px;
+    background: var(--olive);
+  }
+  .trips__head {
+    position: relative;
+    top: -57px;
   }
   .trips__title {
-    margin-bottom: 40px;
+    margin: 14px 0;
     color: var(--white);
+  }
+  .trips__subtitle {
+    color: var(--white);
+    opacity: 0.85;
+    margin-bottom: 40px;
   }
   .trips__filters {
     display: flex;
     justify-content: center;
     gap: 12px;
-    margin-bottom: 56px;
     flex-wrap: wrap;
   }
   .trips__filter {
-    padding: 10px 22px;
-    border-radius: var(--petal);
+    padding: 10px 20px;
+    border-radius: var(--petal-alt);
     border: 1px solid rgba(255, 255, 255, 0.5);
     background: transparent;
     color: var(--white);
-    font-size: 16px;
+    font-size: 15.4px;
+    letter-spacing: 0.03em;
     cursor: pointer;
     font-family: var(--font-body);
     transition: transform var(--ease);
@@ -184,6 +134,7 @@ const place = (d: { destination: string; duration: string }) =>
 
   .trips__carousel {
     position: relative;
+    top: -38px;
     max-width: 1280px;
     margin: 0 auto;
   }
@@ -218,7 +169,8 @@ const place = (d: { destination: string; duration: string }) =>
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    padding: 4px 0 20px;
+    padding: 24px 0 36px;
+    margin: -20px 0 -16px;
     scrollbar-width: none;
     outline-offset: 6px;
   }
@@ -230,233 +182,52 @@ const place = (d: { destination: string; duration: string }) =>
     scroll-snap-align: start;
     display: flex;
     justify-content: center;
+    padding: 0 60px;
   }
   .trips__slide[hidden] {
     display: none;
   }
 
-  .postcard {
-    flex: 0 0 calc(100% - 114px);
-    min-width: 0;
-    background: var(--white);
-    border-radius: 10px;
-    overflow: hidden;
-    cursor: pointer;
-    display: flex;
-    padding: 16px;
-    gap: 16px;
-    transition: transform 0.2s ease;
-    position: relative;
-    color: var(--ink);
-    text-decoration: none;
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    .postcard:hover {
-      transform: scale(1.03);
-    }
-  }
-  .postcard :global(.postcard__photo) {
-    position: relative;
-    flex: 0 1 534px;
-    min-width: 0;
-    width: 534px;
-    height: 460px;
-    border-radius: 4px;
-    object-fit: cover;
+  .trips__ribbon {
+    position: absolute;
+    left: 0;
+    bottom: -96px;
+    width: 100%;
+    height: auto;
     display: block;
+    overflow: visible;
+    pointer-events: none;
+    z-index: 3;
   }
-  .postcard__photo--empty {
-    background: var(--blush);
-  }
-  .postcard__text {
-    flex: 1 0 240px;
-    min-width: 0;
-    padding: 120px 26px 28px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  .postcard__category {
+  .trips__ribbon-text {
     font-family: var(--font-script);
-    font-size: 24px;
-    letter-spacing: 0.02em;
-    color: var(--sage);
-    margin: 0 0 10px;
-  }
-  .postcard__title {
-    font-family: var(--font-title);
-    font-weight: 500;
-    font-size: 22px;
-    margin: 0 0 8px;
-    line-height: 1.25;
-  }
-  .postcard__place {
-    font-size: 16px;
-    color: var(--ink);
-    opacity: 0.65;
-    margin: 0;
+    font-size: 38px;
+    fill: var(--plum);
   }
 
   @media (max-width: 759px) {
+    .trips {
+      padding-bottom: 130px;
+      overflow-x: clip;
+      overflow-y: visible;
+    }
+    .trips__head {
+      top: -30px;
+    }
+    .trips__carousel {
+      top: -20px;
+    }
     .trips__arrow {
       display: none;
     }
-    .postcard {
-      flex: 0 0 calc(100% - 20px);
-      flex-direction: column;
-      padding: 12px;
-      gap: 0;
+    .trips__slide {
+      padding: 0 8px;
     }
-    .postcard :global(.postcard__photo) {
-      flex: none;
-      width: 100%;
-      height: 260px;
-    }
-    .postcard__text {
-      flex: 1 1 auto;
-      padding: 22px 10px 12px;
-      justify-content: flex-start;
-    }
-    .postcard :global(.postcard__stamp) {
-      top: 18px;
-      right: 18px;
-      transform: scale(0.8);
-      transform-origin: top right;
-    }
-  }
-
-  /* Modale racconto */
-  .story-modal {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    max-width: none;
-    max-height: none;
-    margin: 0;
-    padding: 24px;
-    border: none;
-    background: rgba(26, 26, 26, 0.55);
-    align-items: center;
-    justify-content: center;
-  }
-  .story-modal[open] {
-    display: flex;
-  }
-  .story-modal::backdrop {
-    background: transparent;
-  }
-  .story-modal__box {
-    background: var(--white);
-    max-width: 640px;
-    width: 100%;
-    max-height: 86vh;
-    overflow: auto;
-    position: relative;
-  }
-  .story-modal__close {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    z-index: 2;
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    border: none;
-    background: rgba(255, 255, 255, 0.9);
-    color: var(--ink);
-    font-size: 19px;
-    line-height: 1;
-    cursor: pointer;
-  }
-  .story__media {
-    position: relative;
-    height: 260px;
-    background: var(--blush);
-  }
-  .story__strip {
-    display: flex;
-    height: 100%;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-  }
-  .story__strip::-webkit-scrollbar {
-    display: none;
-  }
-  .story__strip :global(picture) {
-    flex: 0 0 100%;
-    scroll-snap-align: start;
-  }
-  .story__strip :global(img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-  .story__nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    border: none;
-    background: rgba(255, 255, 255, 0.9);
-    color: var(--ink);
-    font-size: 22px;
-    line-height: 1;
-    cursor: pointer;
-  }
-  .story__nav--prev {
-    left: 14px;
-  }
-  .story__nav--next {
-    right: 14px;
-  }
-  .story__body {
-    padding: 36px;
-  }
-  .story__category {
-    font-family: var(--font-script);
-    font-size: 26px;
-    letter-spacing: 0.02em;
-    color: var(--sage);
-    margin: 0 0 12px;
-  }
-  .story__title {
-    font-family: var(--font-title);
-    font-weight: 500;
-    font-size: 28px;
-    margin: 0 0 6px;
-  }
-  .story__place {
-    font-size: 17px;
-    color: var(--ink);
-    opacity: 0.6;
-    margin: 0 0 20px;
-  }
-  .story__text {
-    font-size: 18px;
-    line-height: 1.75;
-    color: rgba(26, 26, 26, 0.85);
-    margin: 0 0 28px;
-  }
-  .story__cta {
-    display: inline-block;
-    background: var(--blush);
-    color: var(--white);
-    text-decoration: none;
-    padding: 14px 28px;
-    border-radius: var(--petal);
-    font-size: 17px;
-  }
-  @media (max-width: 479px) {
-    .story-modal {
-      padding: 12px;
-    }
-    .story__body {
-      padding: 28px 22px;
+    /* Nastro più largo dello schermo: la scritta resta leggibile */
+    .trips__ribbon {
+      width: 260%;
+      left: -80%;
+      bottom: -110px;
     }
   }
 </style>
@@ -467,13 +238,10 @@ const place = (d: { destination: string; duration: string }) =>
     const rail = section.querySelector<HTMLElement>('[data-rail]')!;
     const slides = [...section.querySelectorAll<HTMLElement>('.trips__slide')];
     const filters = [...section.querySelectorAll<HTMLButtonElement>('[data-filter]')];
-    const modal = section.querySelector<HTMLDialogElement>('[data-story-modal]')!;
-    const content = modal.querySelector<HTMLElement>('[data-story-content]')!;
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
     const behavior = (): ScrollBehavior => (reduced.matches ? 'auto' : 'smooth');
 
     const slideBy = (dir: number) => rail.scrollBy({ left: dir * rail.clientWidth, behavior: behavior() });
-
     section.querySelectorAll<HTMLButtonElement>('.trips__arrow').forEach((b) =>
       b.addEventListener('click', () => slideBy(Number(b.dataset.dir))),
     );
@@ -485,64 +253,69 @@ const place = (d: { destination: string; duration: string }) =>
     });
 
     const applyFilter = (category: string) => {
-      filters.forEach((f) => f.setAttribute('aria-pressed', String(f.dataset.filter === category)));
-      slides.forEach((s) => (s.hidden = category !== '' && s.dataset.category !== category));
+      const known = filters.some((f) => f.dataset.filter === category);
+      const c = known ? category : '';
+      filters.forEach((f) => f.setAttribute('aria-pressed', String(f.dataset.filter === c)));
+      slides.forEach((s) => (s.hidden = c !== '' && s.dataset.category !== c));
       rail.scrollTo({ left: 0, behavior: 'auto' });
     };
     filters.forEach((f) => f.addEventListener('click', () => applyFilter(f.dataset.filter ?? '')));
+    // Pulsanti di altre sezioni (es. "Scopri i viaggi di nozze") possono scegliere il filtro.
+    document.addEventListener('click', (e) => {
+      const trigger = (e.target as HTMLElement).closest<HTMLElement>('[data-trip-filter]');
+      if (trigger) applyFilter(trigger.dataset.tripFilter ?? '');
+    });
 
-    // Modale: il link della cartolina porta a /viaggi/<slug>; con JS apre il racconto sul posto.
-    const clearHash = () => history.replaceState(null, '', location.pathname + location.search);
-
-    const open = (id: string) => {
-      const tpl = section.querySelector<HTMLTemplateElement>(`template[data-story="${CSS.escape(id)}"]`);
-      if (!tpl) return false;
-      content.replaceChildren(tpl.content.cloneNode(true));
-      setupGallery();
-      modal.showModal();
-      modal.querySelector<HTMLElement>('.story-modal__box')!.scrollTop = 0;
-      history.replaceState(null, '', '#' + id);
-      return true;
-    };
-
-    function setupGallery() {
-      const strip = content.querySelector<HTMLElement>('[data-gallery-strip]');
-      if (!strip) return;
-      content.querySelectorAll<HTMLButtonElement>('[data-gallery-dir]').forEach((b) =>
-        b.addEventListener('click', () =>
-          strip.scrollBy({ left: Number(b.dataset.galleryDir) * strip.clientWidth, behavior: behavior() }),
-        ),
-      );
+    // Nastro "Dream, smile, go!" che scorre lungo l'onda, con gli aeroplanini tra le frasi.
+    const tp = section.querySelector<SVGTextPathElement>('[data-ribbon-text]');
+    const path = section.querySelector<SVGPathElement>('#tft-ribbon-path');
+    const planes = [...section.querySelectorAll<SVGPathElement>('[data-ribbon-planes] path')];
+    const ribbon = section.querySelector<SVGSVGElement>('[data-ribbon]');
+    if (tp && path && ribbon && !reduced.matches) {
+      const GAP = 76;
+      let unit = 0;
+      let phrase = 0;
+      let off = 0;
+      let last = performance.now();
+      let raf = 0;
+      const measure = () => {
+        try {
+          const first = tp.querySelector('tspan');
+          phrase = first ? first.getComputedTextLength() : 0;
+          unit = phrase + GAP;
+        } catch {
+          unit = 0;
+        }
+      };
+      const step = (now: number) => {
+        const dt = Math.min(now - last, 100);
+        last = now;
+        if (!unit) measure();
+        if (unit > 0) {
+          off = (off + dt * 0.06) % unit;
+          tp.setAttribute('startOffset', String(-off));
+          const total = path.getTotalLength();
+          planes.forEach((p, k) => {
+            const s = -off + k * unit + phrase + GAP / 2;
+            if (s < 2 || s > total - 2) return p.setAttribute('visibility', 'hidden');
+            const a = path.getPointAtLength(s);
+            const b = path.getPointAtLength(Math.min(total, s + 1));
+            const ang = (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI + 180;
+            p.setAttribute('transform', `translate(${a.x.toFixed(1)} ${a.y.toFixed(1)}) rotate(${ang.toFixed(1)}) scale(0.85)`);
+            p.setAttribute('visibility', 'visible');
+          });
+        }
+        raf = requestAnimationFrame(step);
+      };
+      document.fonts?.ready.then(() => (unit = 0));
+      // Anima solo quando il nastro è visibile.
+      new IntersectionObserver(([e]) => {
+        cancelAnimationFrame(raf);
+        if (e.isIntersecting) {
+          last = performance.now();
+          raf = requestAnimationFrame(step);
+        }
+      }).observe(ribbon);
     }
-
-    section.querySelectorAll<HTMLAnchorElement>('[data-story-open]').forEach((a) =>
-      a.addEventListener('click', (e) => {
-        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
-        if (open(a.dataset.storyOpen!)) e.preventDefault();
-      }),
-    );
-
-    modal.querySelector('[data-story-close]')!.addEventListener('click', () => modal.close());
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) modal.close();
-    });
-    modal.addEventListener('close', () => {
-      if (location.hash && location.hash !== '#contatti') clearHash();
-    });
-    content.addEventListener('click', (e) => {
-      const cta = (e.target as HTMLElement).closest('[data-story-cta]');
-      if (!cta) return;
-      e.preventDefault();
-      modal.close();
-      history.replaceState(null, '', '#contatti');
-      document.getElementById('contatti')?.scrollIntoView({ behavior: behavior() });
-    });
-
-    const fromHash = () => {
-      const id = decodeURIComponent(location.hash.slice(1));
-      if (id && !document.getElementById(id)) open(id);
-    };
-    fromHash();
-    window.addEventListener('hashchange', fromHash);
   }
 </script>

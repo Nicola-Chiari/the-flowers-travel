@@ -1,4 +1,5 @@
 ---
+import WaveEdge from './WaveEdge.astro';
 import { single } from '../lib/content';
 
 const r = await single('recensioni');
@@ -6,15 +7,16 @@ const ui = await single('ui');
 ---
 
 <section id="recensioni" class="reviews">
-  <p class="eyebrow eyebrow--muted">{r.eyebrow}</p>
+  <WaveEdge position="top" color="#6b7860" />
+  <WaveEdge position="bottom" color="#6b7860" />
+  <p class="eyebrow reviews__eyebrow">{r.eyebrow}</p>
   <h2 class="section-title reviews__title">{r.title}</h2>
+  {r.subtitle && <p class="section-intro reviews__subtitle">{r.subtitle}</p>}
   <div class="reviews__grid">
     {
       r.items.map((rev) => (
         <figure class="reviews__card">
-          <span class="reviews__quote-mark" aria-hidden="true">
-            "
-          </span>
+          <span class="reviews__mark" aria-hidden="true">"</span>
           <blockquote>{rev.quote}</blockquote>
           <div class="reviews__stars" role="img" aria-label={ui.starsLabel.replace('{n}', String(rev.stars))}>
             {'★'.repeat(rev.stars)}
@@ -27,29 +29,64 @@ const ui = await single('ui');
       ))
     }
   </div>
+
+  {
+    r.inviteTitle && (
+      <div class="reviews__invite">
+        <svg class="reviews__wave" viewBox="0 0 606 23" fill="none" aria-hidden="true">
+          <path
+            transform="translate(13.3 0)"
+            d="M3 11.65 C 20.5 1, 37.9 1, 55.4 11.65 C 72.9 22.3, 90.3 22.3, 107.8 11.65 C 125.3 1, 142.7 1, 160.2 11.65 C 177.7 22.3, 195.1 22.3, 212.6 11.65 C 230.1 1, 247.5 1, 265.0 11.65 C 282.5 22.3, 299.9 22.3, 317.4 11.65 C 334.9 1, 352.3 1, 369.8 11.65 C 387.3 22.3, 404.7 22.3, 422.2 11.65 C 439.7 1, 457.1 1, 474.6 11.65 C 492.1 22.3, 509.5 22.3, 527.0 11.65 C 544.5 1, 561.9 1, 579.4 11.65"
+            stroke="#d9bec2"
+            stroke-width="4.4"
+            stroke-linecap="round"
+          />
+        </svg>
+        <p class="reviews__invite-title">{r.inviteTitle}</p>
+        {r.inviteText && <p class="reviews__invite-text">{r.inviteText}</p>}
+        {r.inviteButton && r.inviteLink && (
+          <div class="reviews__invite-cta">
+            <a href={r.inviteLink} target="_blank" rel="noopener" class="btn btn--plum">
+              {r.inviteButton}
+            </a>
+          </div>
+        )}
+      </div>
+    )
+  }
 </section>
 
 <style>
   .reviews {
-    padding: 110px var(--gutter);
-    background: var(--sage-dark);
+    position: relative;
+    z-index: 1;
+    padding: 72px var(--gutter) 110px;
+    background: var(--olive);
     color: var(--white);
   }
+  .reviews__eyebrow {
+    margin: 0;
+  }
   .reviews__title {
+    margin: 14px 0;
+  }
+  .reviews__subtitle {
+    opacity: 0.85;
     margin-bottom: 64px;
   }
   .reviews__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 40px;
-    max-width: 1160px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 28px;
+    max-width: 1240px;
     margin: 0 auto;
   }
   .reviews__card {
     margin: 0;
     background: var(--white);
     color: var(--ink);
-    padding: 36px 30px;
+    border-radius: 12px;
+    padding: 32px 26px;
     display: flex;
     flex-direction: column;
     gap: 18px;
@@ -60,32 +97,80 @@ const ui = await single('ui');
       transform: translateY(-6px);
     }
   }
-  .reviews__quote-mark {
+  .reviews__mark {
     font-family: var(--font-body);
     font-size: 48px;
     line-height: 1;
-    color: var(--blush);
+    color: var(--plum);
   }
   .reviews__card blockquote {
     font-size: 18px;
     line-height: 1.7;
     margin: 0;
     opacity: 0.85;
-    flex: 1;
   }
   .reviews__stars {
-    font-size: 17px;
-    color: var(--blush);
-    letter-spacing: 2px;
+    font-size: 24px;
+    color: var(--gold);
+    letter-spacing: 3px;
+  }
+  .reviews__card figcaption {
+    margin-top: auto;
+    padding-top: 58px;
   }
   .reviews__name {
     font-weight: 500;
     margin: 0;
     font-size: 17px;
+    color: var(--plum);
   }
   .reviews__trip {
     margin: 0;
     font-size: 12px;
-    opacity: 0.6;
+    color: var(--plum);
+    opacity: 0.75;
+  }
+  .reviews__wave {
+    display: block;
+    width: min(606px, 49%);
+    height: auto;
+    margin: 102px auto 0;
+  }
+  .reviews__invite-title {
+    font-family: var(--font-script);
+    font-size: 52px;
+    line-height: 1.1;
+    color: var(--plum);
+    text-align: center;
+    margin: 56px 0 0;
+  }
+  .reviews__invite-text {
+    font-size: 19px;
+    line-height: 1.7;
+    text-align: center;
+    max-width: 620px;
+    margin: 31px auto 0;
+    text-wrap: pretty;
+  }
+  .reviews__invite-cta {
+    display: flex;
+    justify-content: center;
+    margin-top: 47px;
+  }
+  @media (max-width: 759px) {
+    .reviews__card figcaption {
+      padding-top: 24px;
+    }
+    .reviews__wave {
+      width: 80%;
+      margin-top: 72px;
+    }
+    .reviews__invite-title {
+      font-size: 44px;
+    }
+    .reviews__invite-cta .btn {
+      white-space: normal;
+      text-align: center;
+    }
   }
 </style>

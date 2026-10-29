@@ -1,32 +1,62 @@
 ---
 import Img from './Img.astro';
+import WaveEdge from './WaveEdge.astro';
 import { single, splitMarker, stripMarkers } from '../lib/content';
 
 const c = await single('chiSono');
 
+// Titoletto: [[testo]] = parte sottolineata dall'onda dorata.
+const eyebrowMatch = c.eyebrow.match(/^(.*?)\[\[(.+?)\]\](.*)$/);
 // [[foto]] nel titolo = dove inizia la foto; [[/foto]] in un paragrafo = dove finisce.
 const titleParts = splitMarker(stripMarkers(c.title.replace('[[foto]]', '\u0000')), '\u0000');
 const paragraphs = c.paragraphs.map((p) => {
   const parts = splitMarker(stripMarkers(p.replace('[[/foto]]', '\u0000')), '\u0000');
   return parts ?? stripMarkers(p);
 });
-const lists = [
-  { title: c.whyTitle, items: c.whyItems },
-  { title: c.valuesTitle, items: c.valuesItems },
-];
 ---
 
 <section id="chi-sono" class="about">
-  <p class="about__eyebrow">{c.eyebrow}</p>
-  <div class="about__grid" data-about>
+  <WaveEdge position="top" color="#E6D1D4" />
+  <WaveEdge position="bottom" color="#E6D1D4" />
+
+  <div class="about__head">
+    <div class="about__eyebrow-wrap" data-eyebrow>
+      <p class="about__eyebrow">
+        {
+          eyebrowMatch ? (
+            <>
+              {eyebrowMatch[1]}
+              <span data-wave-text>{eyebrowMatch[2]}</span>
+              {eyebrowMatch[3]}
+            </>
+          ) : (
+            c.eyebrow
+          )
+        }
+      </p>
+      <svg class="about__wave" data-wave viewBox="0 0 250 16" preserveAspectRatio="none" fill="none" aria-hidden="true"
+        ><path
+          d="M2 8 C 14 0, 26 0, 38 8 S 62 16, 74 8 S 98 0, 110 8 S 134 16, 146 8 S 170 0, 182 8 S 206 16, 218 8 S 242 0, 248 6"
+          stroke="#E6B84A"
+          stroke-width="4.4"
+          stroke-linecap="round"
+          vector-effect="non-scaling-stroke"></path></svg
+      >
+    </div>
+  </div>
+
+  <div class="about__grid">
     <div class="about__photo" data-photo-cell>
-      <Img
-        src={c.photo}
-        alt={c.photoAlt}
-        widths={[400, 600, 920, 1080]}
-        sizes="(max-width: 759px) 88vw, 460px"
-        data-photo
-      />
+      <div class="about__photo-area" data-photo-area>
+        <div class="about__blob">
+          <Img
+            src={c.photo}
+            alt={c.photoAlt}
+            widths={[400, 600, 920, 1080]}
+            sizes="(max-width: 759px) 80vw, 460px"
+          />
+        </div>
+      </div>
     </div>
     <div class="about__text" data-photo-text>
       <h2 class="about__title">
@@ -55,45 +85,53 @@ const lists = [
           ),
         )
       }
+      {
+        c.cta && c.ctaLink && (
+          <div class="about__cta">
+            <a href={c.ctaLink} class="btn btn--alt btn--plum">
+              {c.cta}
+            </a>
+          </div>
+        )
+      }
     </div>
-  </div>
-
-  <div class="about__columns">
-    {
-      lists.map((l) => (
-        <div class="about__col">
-          <p class:list={['about__col-title', { 'about__col-title--alone': l.items.length === 0 }]}>{l.title}</p>
-          {l.items.length > 0 && (
-            <ul class="about__list">
-              {l.items.map((item) => (
-                <li>
-                  <span class="about__dot" aria-hidden="true" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      ))
-    }
-    <span class="about__divider" aria-hidden="true"></span>
   </div>
 </section>
 
 <style>
   .about {
-    padding: 110px var(--gutter);
-    background: var(--sage);
+    position: relative;
+    z-index: 1;
+    padding: 110px var(--gutter) 148px;
+    background: var(--rose);
+  }
+  .about__head {
+    display: flex;
+    justify-content: center;
+    margin: 0 0 40px;
+    position: relative;
+    top: -38px;
+  }
+  .about__eyebrow-wrap {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
   }
   .about__eyebrow {
     font-family: var(--font-script);
     font-size: 62px;
-    letter-spacing: 0.02em;
-    font-weight: 600;
-    color: var(--ink);
-    opacity: 0.6;
-    margin: 0 0 40px;
+    font-weight: 400;
+    color: var(--plum);
+    margin: 0;
+    line-height: 1.1;
     text-align: center;
+  }
+  .about__wave {
+    display: block;
+    align-self: center;
+    width: 300px;
+    height: 23px;
+    margin-top: 2px;
   }
   .about__grid {
     display: grid;
@@ -101,23 +139,41 @@ const lists = [
     gap: 60px;
     align-items: stretch;
     margin-left: -38px;
+    margin-top: 38px;
   }
   .about__photo {
     position: relative;
     width: 460px;
     max-width: 100%;
-    overflow: hidden;
     justify-self: center;
   }
-  .about__photo :global([data-photo]) {
+  .about__photo-area {
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
+  }
+  .about__blob {
+    position: absolute;
+    top: 50%;
+    left: 2%;
+    width: 96%;
+    aspect-ratio: 0.88;
+    overflow: hidden;
+    border-radius: var(--blob-1);
+    transform: translateY(calc(-50% + 38px)) rotate(-4deg);
+    background: var(--blush);
+  }
+  .about__blob :global(img) {
+    position: absolute;
+    inset: -4%;
+    width: 108%;
+    height: 108%;
     max-width: none;
     object-fit: cover;
     object-position: 50% 100%;
+    transform: rotate(4deg);
   }
   .about__text {
     max-width: calc(100% - 25px);
@@ -128,134 +184,77 @@ const lists = [
     font-size: var(--h2-size);
     line-height: 1.2;
     margin: 0 0 24px;
-    color: var(--white);
+    color: var(--plum);
   }
   .about__text p {
     font-size: 19px;
     line-height: 1.75;
-    color: var(--white);
+    color: var(--plum);
     opacity: 0.9;
     margin: 0 0 20px;
   }
-  .about__text p:last-child {
+  .about__text p:last-of-type {
     margin-bottom: 36px;
   }
-
-  .about__columns {
-    position: relative;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    max-width: 1100px;
-    margin: 70px auto 0;
-  }
-  .about__col {
-    text-align: center;
-  }
-  .about__col:first-child {
-    padding-right: 50px;
-  }
-  .about__col:nth-child(2) {
-    padding-left: 50px;
-  }
-  .about__divider {
-    position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background: rgba(255, 255, 255, 0.3);
-  }
-  .about__col-title {
-    font-family: var(--font-script);
-    font-size: 46px;
-    letter-spacing: 0.02em;
-    font-weight: 600;
-    color: var(--ink);
-    opacity: 0.6;
-    margin: 0 0 24px;
-  }
-  .about__col-title--alone {
-    margin: 0;
-  }
-  .about__list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  .about__cta {
     display: flex;
-    flex-direction: column;
-    gap: 14px;
-    align-items: center;
-  }
-  .about__list li {
-    display: flex;
-    gap: 12px;
-    align-items: baseline;
-    font-size: 18px;
-    line-height: 1.6;
-    color: rgba(255, 255, 255, 0.92);
-  }
-  .about__dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--ink);
-    opacity: 0.6;
-    flex-shrink: 0;
+    margin-top: 46px;
   }
 
   @media (max-width: 759px) {
     .about {
-      padding: 90px var(--gutter);
+      padding: 90px var(--gutter) 120px;
+    }
+    .about__head {
+      top: -20px;
+      margin-bottom: 0;
     }
     .about__eyebrow {
-      font-size: 52px;
+      font-size: 46px;
     }
     .about__grid {
       grid-template-columns: 1fr;
       gap: 40px;
       margin-left: 0;
+      margin-top: 20px;
     }
     .about__photo {
+      width: 80%;
+    }
+    .about__photo-area {
+      position: static;
+      height: auto !important;
+    }
+    .about__blob {
+      position: relative;
+      top: 0;
+      left: 0;
       width: 100%;
-      aspect-ratio: 4 / 5;
+      transform: rotate(-4deg);
     }
     .about__text {
       max-width: 100%;
     }
-    .about__columns {
-      grid-template-columns: 1fr;
-      gap: 40px;
-      margin-top: 56px;
-    }
-    .about__col:first-child,
-    .about__col:nth-child(2) {
-      padding: 0;
-    }
-    .about__col:nth-child(2) {
-      padding-top: 40px;
-      border-top: 1px solid rgba(255, 255, 255, 0.3);
-    }
-    .about__divider {
-      display: none;
+    .about__cta {
+      margin-top: 24px;
     }
   }
 </style>
 
 <script>
-  // Allinea la foto: bordo alto = inizio di [[foto]], bordo basso = inizio di [[/foto]].
-  // Senza marcatori la foto occupa l'altezza del blocco di testo.
+  // Area della foto: dal segno [[foto]] al segno [[/foto]] (o tutto il testo).
   const cell = document.querySelector<HTMLElement>('[data-photo-cell]');
+  const area = document.querySelector<HTMLElement>('[data-photo-area]');
   const text = document.querySelector<HTMLElement>('[data-photo-text]');
-  const photo = cell?.querySelector<HTMLImageElement>('img[data-photo]');
   const start = text?.querySelector<HTMLElement>('[data-photo-start]');
   const end = text?.querySelector<HTMLElement>('[data-photo-end]');
   const stacked = matchMedia('(max-width: 759px)');
 
-  function measure() {
-    if (!cell || !text || !photo) return;
+  function measurePhoto() {
+    if (!cell || !area || !text) return;
     if (stacked.matches) {
-      photo.style.top = '';
-      photo.style.height = '';
+      area.style.top = '';
+      area.style.height = '';
       return;
     }
     const base = cell.getBoundingClientRect().top;
@@ -263,13 +262,60 @@ const lists = [
     const top = (start ? start.getBoundingClientRect().top : t.top) - base;
     const bottom = (end ? end.getBoundingClientRect().top : t.bottom) - base;
     if (bottom - top < 80) return;
-    photo.style.top = Math.round(top) + 'px';
-    photo.style.height = Math.round(bottom - top) + 'px';
+    area.style.top = Math.round(top) + 'px';
+    area.style.height = Math.round(bottom - top) + 'px';
   }
 
-  measure();
-  document.fonts?.ready.then(measure);
-  window.addEventListener('load', measure);
-  if (text) new ResizeObserver(measure).observe(text);
-  stacked.addEventListener('change', measure);
+  // Onda dorata sotto la parte [[...]] del titoletto; se va a capo, onda centrata.
+  const wrap = document.querySelector<HTMLElement>('[data-eyebrow]');
+  const waveText = wrap?.querySelector<HTMLElement>('[data-wave-text]');
+  const wave = wrap?.querySelector<SVGSVGElement>('[data-wave]');
+
+  function fitWave() {
+    if (!wrap || !wave) return;
+    const path = wave.querySelector('path')!;
+    const rects = waveText ? waveText.getClientRects() : [];
+    if (!waveText || rects.length !== 1) {
+      wave.style.cssText = 'align-self: center; width: 60%; margin-left: 0;';
+      return;
+    }
+    const p = wrap.getBoundingClientRect();
+    const r = rects[0];
+    const W = Math.max(40, r.width);
+    wave.style.cssText = `align-self: flex-start; margin-left: ${r.left - p.left}px; width: ${W}px; height: 21px;`;
+    wave.setAttribute('viewBox', `0 0 ${W} 21`);
+    wave.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    // Onde di passo fisso, così non si deformano con la lunghezza del testo.
+    const half = 47.2;
+    const c1 = 15.75;
+    const c2 = 31.4;
+    const mid = 10.5;
+    let x = 3;
+    let up = true;
+    let d = `M${x} ${mid}`;
+    while (x + half <= W - 3) {
+      const y = up ? 0 : 21;
+      d += ` C ${x + c1} ${y}, ${x + c2} ${y}, ${x + half} ${mid}`;
+      x += half;
+      up = !up;
+    }
+    const rest = W - 3 - x;
+    if (rest > 6) {
+      const k = rest / half;
+      const y = up ? 0 : 21;
+      d += ` C ${x + c1 * k} ${mid + (y - mid) * k}, ${x + c2 * k} ${mid + (y - mid) * k}, ${x + rest} ${mid + (y - mid) * 0.3}`;
+    }
+    path.setAttribute('d', d);
+    path.removeAttribute('vector-effect');
+  }
+
+  const all = () => {
+    measurePhoto();
+    fitWave();
+  };
+  all();
+  document.fonts?.ready.then(all);
+  window.addEventListener('load', all);
+  if (text) new ResizeObserver(all).observe(text);
+  stacked.addEventListener('change', all);
 </script>

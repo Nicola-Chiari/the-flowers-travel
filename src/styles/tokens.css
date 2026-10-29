@@ -1,32 +1,45 @@
 /* Design tokens — unica fonte per colori, font, raggi e ombre. */
 :root {
   /* Colori */
-  --sage: #7d8f90;
-  --sage-dark: #556b6b;
+  --olive: #6b7860;
+  --plum: #542833;
+  --gold: #e6b84a;
+  --rose: #e6d1d4;
   --blush: #d9bec2;
   --blush-light: #f6ecee;
+  --cream: #fbf6ee;
   --ink: #1a1a1a;
   --white: #ffffff;
+  --error: #b0485a;
 
   /* Font */
   --font-body: 'Lato', sans-serif;
   --font-title: 'Playfair Display', serif;
-  --font-script: 'Great Vibes', cursive;
+  --font-script: 'Sacramento', cursive;
   --font-mono: monospace;
 
   /* Spaziature */
   --gutter: 6vw;
 
   /* Raggi */
-  --petal: 22px 8px 22px 8px;
-  --petal-alt: 8px 22px 8px 22px;
+  --petal: 20px 7px 20px 7px;
+  --petal-alt: 7px 20px 7px 20px;
+  --petal-lg: 22px 8px 22px 8px;
+  --petal-lg-alt: 8px 22px 8px 22px;
+  /* Forme organiche per foto e illustrazioni */
+  --blob-1: 50% 50% 42% 58% / 44% 46% 54% 56%;
+  --blob-2: 58% 42% 55% 45% / 48% 56% 44% 52%;
+  --blob-3: 46% 54% 60% 40% / 54% 44% 56% 46%;
+  --blob-4: 54% 46% 44% 56% / 42% 54% 46% 58%;
+  --blob-5: 48% 52% 56% 44% / 50% 42% 58% 50%;
 
   /* Ombre */
   --shadow-nav: 0 8px 32px rgba(26, 26, 26, 0.12);
   --shadow-card: 0 10px 24px rgba(26, 26, 26, 0.12);
+  --shadow-postcard: 0 10px 26px rgba(0, 0, 0, 0.18), 0 1px 3px rgba(0, 0, 0, 0.08);
   --shadow-float: 0 6px 18px rgba(0, 0, 0, 0.25);
 
   /* Tipografia ricorrente */
-  --h2-size: clamp(28px, 4vw, 42px);
+  --h2-size: clamp(24px, 3.2vw, 34px);
   --ease: 0.15s ease;
 }

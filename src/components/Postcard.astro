@@ -1,0 +1,289 @@
+---
+// Cartolina di un viaggio: usata nel carosello della home e in "Altri viaggi".
+import type { CollectionEntry } from 'astro:content';
+import Img from './Img.astro';
+import { single } from '../lib/content';
+
+interface Props {
+  trip: CollectionEntry<'viaggi'>;
+  eager?: boolean;
+  /** Le onde rosa ai lati (solo nel carosello). */
+  sideWaves?: boolean;
+  /** Versione stretta per le griglie (es. "Altri viaggi"). */
+  compact?: boolean;
+}
+const { trip, eager = false, sideWaves = false, compact = false } = Astro.props;
+const d = trip.data;
+const ui = await single('ui');
+const sideWave =
+  'M8 2 C 0 12, 0 22, 8 32 S 16 52, 8 62 S 0 82, 8 92 S 16 112, 8 122 S 0 142, 8 152 S 16 172, 8 182 S 0 202, 8 212';
+---
+
+<a href={`/viaggi/${trip.id}`} class:list={['postcard', { 'postcard--compact': compact }]}>
+  {
+    sideWaves && (
+      <>
+        <svg class="postcard__side postcard__side--l" width="16" height="214" viewBox="0 0 16 214" fill="none" aria-hidden="true">
+          <path d={sideWave} stroke="#d9bec2" stroke-width="3" stroke-linecap="round" />
+        </svg>
+        <svg class="postcard__side postcard__side--r" width="16" height="214" viewBox="0 0 16 214" fill="none" aria-hidden="true">
+          <path d={sideWave} stroke="#d9bec2" stroke-width="3" stroke-linecap="round" />
+        </svg>
+      </>
+    )
+  }
+  <div class="postcard__media">
+    {
+      d.cover ? (
+        <Img
+          src={d.cover}
+          alt={d.coverAlt || `${d.people} — ${d.title}`.trim()}
+          class="postcard__photo"
+          widths={[400, 600, 1100]}
+          sizes="(max-width: 759px) 88vw, 548px"
+          loading={eager ? 'eager' : 'lazy'}
+        />
+      ) : (
+        <div class="postcard__photo postcard__photo--empty" />
+      )
+    }
+    {
+      d.stamp ? (
+        <Img src={d.stamp} alt="" class="postcard__stamp" widths={[132, 264]} sizes="132px" />
+      ) : (
+        <div class="postcard__stamp postcard__stamp--empty" aria-hidden="true" />
+      )
+    }
+  </div>
+  <div class="postcard__text">
+    <h3 class="postcard__title">
+      {d.people && <span class="postcard__people">{d.people}</span>}
+      <span class="postcard__name">{d.title}</span>
+    </h3>
+    <div class="postcard__meta">
+      <span>
+        <svg width="22" height="24" viewBox="0 0 24 26" fill="none" stroke="#d9bec2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+          ><path
+            d="M12.3 24.2 C 9.4 20.8, 4.6 15.6, 4.2 10.6 C 3.8 6.1, 7.4 2.4, 11.8 2.3 C 16.6 2.2, 20.1 5.8, 19.8 10.4 C 19.5 15.1, 15.2 20.2, 12.1 24"
+            stroke-width="1.9"></path><path d="M11.4 2.9 C 15.9 2.6, 19.4 6.1, 19.2 10.6" stroke-width="0.9" opacity="0.7"
+          ></path><path
+            d="M12.2 7.1 C 14.1 7, 15.4 8.4, 15.3 10.2 C 15.2 12, 13.7 13.3, 11.9 13.2 C 10.1 13.1, 8.8 11.7, 8.9 9.9 C 9 8.4, 10.3 7.2, 12.4 7.3"
+            stroke-width="1.6"></path></svg
+        >
+        {d.destination}
+      </span>
+      {
+        d.duration && (
+          <span>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d9bec2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3.6 5.4 C 8.8 5, 15.2 5.2, 20.6 5.1 C 20.9 10.4, 20.7 15.6, 20.9 20.7 C 15.3 21, 9.1 20.8, 3.3 21 C 3.1 15.8, 3.4 10.2, 3.6 5.4" stroke-width="1.8" />
+              <path d="M3.4 10.2 C 9 9.8, 14.9 10.3, 20.7 9.9" stroke-width="1.6" />
+              <path d="M8.1 2.9 C 8.2 4.2, 8 5.6, 8.2 7.1 M16 2.8 C 16.1 4.3, 15.9 5.7, 16.1 7.2" stroke-width="1.7" />
+              <path d="M7.6 13.9 L 8.9 14 M11.6 13.8 L 12.8 14.1 M15.5 14 L 16.7 13.9 M7.8 17.4 L 9 17.6 M11.7 17.5 L 12.9 17.4" stroke-width="1.6" />
+            </svg>
+            {d.duration}
+          </span>
+        )
+      }
+    </div>
+    <span class="postcard__more" aria-hidden="true">{ui.more}</span>
+  </div>
+</a>
+
+<style>
+  .postcard {
+    color: inherit;
+    text-decoration: none;
+    flex: 0 1 600px;
+    min-width: 0;
+    background: var(--cream);
+    border-radius: 12px;
+    padding: 26px 26px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    position: relative;
+    transform: rotate(-1deg);
+    box-shadow: var(--shadow-postcard);
+    transition: transform 0.2s ease;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .postcard:hover {
+      transform: rotate(-1deg) scale(1.03);
+    }
+  }
+  .postcard__side {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: block;
+    pointer-events: none;
+  }
+  .postcard__side--l {
+    left: -40px;
+  }
+  .postcard__side--r {
+    right: -40px;
+  }
+  .postcard__media {
+    position: relative;
+  }
+  .postcard :global(.postcard__photo) {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    height: auto;
+    border-radius: 6px;
+    object-fit: cover;
+  }
+  .postcard__photo--empty {
+    background: repeating-linear-gradient(45deg, var(--blush) 0 24px, var(--rose) 24px 48px);
+  }
+  .postcard :global(.postcard__stamp) {
+    position: absolute;
+    right: -14px;
+    bottom: -34px;
+    width: 132px;
+    height: 158px;
+    transform: rotate(3deg);
+    border-radius: 4px;
+    object-fit: contain;
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.18));
+  }
+  .postcard__stamp--empty {
+    background: repeating-linear-gradient(45deg, var(--blush-light) 0 10px, var(--rose) 10px 20px);
+  }
+  .postcard__text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 18px;
+    min-height: 150px;
+    padding: 18px 92px 6px 4px;
+    position: relative;
+  }
+  .postcard__title {
+    font-family: var(--font-title);
+    font-weight: 600;
+    font-size: 26px;
+    line-height: 1.25;
+    color: var(--plum);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .postcard__people {
+    white-space: nowrap;
+    font-family: var(--font-script);
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 1.1;
+    padding: 0 6px 0 2px;
+    margin: 0 0 -10px -2px;
+    position: relative;
+    top: -12px;
+  }
+  .postcard__name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .postcard__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 36px;
+    font-family: var(--font-title);
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--plum);
+  }
+  .postcard__meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+  }
+  .postcard__more {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    font-family: var(--font-script);
+    font-size: 31px;
+    line-height: 1;
+    color: var(--gold);
+    white-space: nowrap;
+    pointer-events: none;
+    transform-origin: right bottom;
+    transition: transform 0.25s ease;
+  }
+  .postcard:hover .postcard__more {
+    transform: scale(1.2);
+  }
+
+  /* Variante stretta: titoli su più righe, "Scopri di più" sotto i dettagli */
+  .postcard--compact :global(.postcard__stamp) {
+    width: 96px;
+    height: 116px;
+    right: -10px;
+    bottom: -26px;
+  }
+  .postcard--compact .postcard__text {
+    padding: 12px 0 40px;
+    min-height: 0;
+    gap: 14px;
+  }
+  .postcard--compact .postcard__title {
+    font-size: 22px;
+  }
+  .postcard--compact .postcard__people {
+    font-size: 34px;
+    white-space: normal;
+  }
+  .postcard--compact .postcard__name {
+    white-space: normal;
+  }
+  .postcard--compact .postcard__meta {
+    font-size: 16px;
+    gap: 8px 24px;
+  }
+  .postcard--compact .postcard__more {
+    font-size: 27px;
+  }
+
+  @media (max-width: 759px) {
+    .postcard {
+      padding: 16px 16px 20px;
+      gap: 20px;
+    }
+    .postcard__side {
+      display: none;
+    }
+    .postcard :global(.postcard__stamp) {
+      width: 92px;
+      height: 110px;
+      right: -8px;
+      bottom: -24px;
+    }
+    .postcard__text {
+      padding: 12px 0 34px;
+      min-height: 0;
+    }
+    .postcard__title {
+      font-size: 21px;
+    }
+    .postcard__people {
+      font-size: 32px;
+      white-space: normal;
+    }
+    .postcard__name {
+      white-space: normal;
+    }
+    .postcard__meta {
+      font-size: 16px;
+      gap: 8px 24px;
+    }
+    .postcard__more {
+      font-size: 27px;
+    }
+  }
+</style>

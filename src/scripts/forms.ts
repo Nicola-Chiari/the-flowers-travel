@@ -20,8 +20,9 @@ const providers: Record<string, Provider> = { netlify };
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 /**
- * Collega un modulo. Messaggi e stati arrivano dagli attributi data-*:
- * data-error-email, data-error-consent, data-error-send, data-sending.
+ * Collega un modulo. I campi da controllare hanno data-error="messaggio":
+ * vuoto (o email non valida, o casella non spuntata) = errore mostrato in [data-form-status].
+ * Sul <form>: data-error-send e data-sending.
  */
 export function enhanceForm(form: HTMLFormElement, onSuccess: () => void) {
   const status = form.querySelector<HTMLElement>('[data-form-status]');
@@ -38,16 +39,23 @@ export function enhanceForm(form: HTMLFormElement, onSuccess: () => void) {
     field?.focus();
   };
 
+  const invalid = (field: HTMLInputElement | HTMLTextAreaElement) => {
+    if (field instanceof HTMLInputElement && field.type === 'checkbox') return !field.checked;
+    const value = field.value.trim();
+    if (field.type === 'email') return !EMAIL.test(value);
+    return value === '';
+  };
+
   form.addEventListener('input', (e) => (e.target as HTMLElement).removeAttribute('aria-invalid'));
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (status) status.hidden = true;
 
-    const email = form.querySelector<HTMLInputElement>('input[type="email"]');
-    if (email && !EMAIL.test(email.value.trim())) return showError(form.dataset.errorEmail ?? '', email);
-    const consent = form.querySelector<HTMLInputElement>('input[name="privacy"]');
-    if (consent && !consent.checked) return showError(form.dataset.errorConsent ?? '', consent);
+    const fields = form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[data-error]');
+    for (const field of fields) {
+      if (invalid(field)) return showError(field.dataset.error ?? '', field);
+    }
 
     const label = submit?.textContent ?? '';
     if (submit) {

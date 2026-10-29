@@ -1,28 +1,25 @@
 {
-  "eyebrow": "Servizi",
-  "title": "Nessun pacchetto preconfezionato",
-  "intro": "Ogni viaggio nasce da una conversazione e viene costruito attorno a chi lo vivrà. Scegli il livello di accompagnamento che ti serve.",
+  "eyebrow": "Come posso aiutarti a partire?",
+  "title": "Tre modi, un viaggio tutto tuo",
+  "intro": "Dal viaggio progettato su misura alla vacanza già organizzata, fino ai consigli per prenotare in autonomia: troviamo insieme la soluzione più adatta a te",
   "items": [
     {
       "title": "Viaggi su misura",
       "desc": "Itinerario progettato da zero: destinazioni, tempi, strutture ed esperienze scelti sul desiderio, il ritmo e il budget di chi viaggia. Specializzazione Asia, Africa e Oceania.",
-      "icon": ""
+      "icon": "",
+      "link": ""
     },
     {
-      "title": "Viaggi di nozze",
-      "desc": "Percorsi per coppie di sposi, con dettagli romantici, strutture di charme ed esperienze indimenticabili. Include la lista nozze viaggio per gli ospiti.",
-      "icon": ""
+      "title": "Fai da te, ma con guida",
+      "desc": "Costruisco per te l’itinerario completo: tappe, tempi, strutture consigliate, esperienze e consigli pratici. Tu prenoti in autonomia e parti con una mappa disegnata su misura.",
+      "icon": "",
+      "link": ""
     },
     {
-      "title": "Viaggi in famiglia",
-      "desc": "Itinerari sui ritmi della famiglia: strutture adatte ai bambini, esperienze per tutte le età e pianificazione senza stress organizzativo.",
-      "icon": ""
-    },
-    {
-      "title": "Consulenza di viaggio",
-      "desc": "Costruzione dell’itinerario, selezione hotel, esperienze consigliate e consigli pratici. Prenoti e parti da solo, con una mappa disegnata su misura.",
-      "icon": ""
+      "title": "Viaggi selezionati",
+      "desc": "Mi dici cosa desideri e il budget, io cerco e seleziono per te la vacanza già organizzata più adatta tra le proposte migliori, così scegli senza perdere tempo.",
+      "icon": "",
+      "link": ""
     }
-  ],
-  "cta": "Richiedi il tuo preventivo"
+  ]
 }

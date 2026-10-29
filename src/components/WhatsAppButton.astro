@@ -7,15 +7,11 @@ const href = `https://wa.me/${site.whatsappNumber}?text=${encodeURIComponent(sit
 ---
 
 <a href={href} target="_blank" rel="noopener" aria-label={ui.whatsapp} class="wa">
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true"
-    ><path
-      d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.06L2 22l4.94-1.38C8.42 21.5 10.15 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"
-      fill="#FFFFFF"
-      opacity="0.15"></path><path
-      d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.06L2 22l4.94-1.38C8.42 21.5 10.15 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"
-      stroke="#FFFFFF"
-      stroke-width="1.4"></path></svg
-  >
+  <svg width="42" height="42" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M16.3 4.2 C 9.6 3.8, 4.6 8.9, 4.5 15.4 C 4.4 17.9, 5.2 20.2, 6.3 22 L 4.9 27.3 L 10.4 25.8 C 12.1 26.9, 14.1 27.5, 16.2 27.6 C 22.6 27.8, 27.6 22.6, 27.5 16.1 C 27.4 9.5, 22.5 4.5, 16.3 4.2" stroke-width="1.9"></path>
+    <path d="M15.8 5 C 22 4.9, 26.9 10.2, 26.6 16.3 C 26.3 22.1, 21.6 26.9, 15.4 26.7" stroke-width="0.9" opacity="0.55"></path>
+    <path d="M11.4 10.6 C 11 11.4, 10.8 12.6, 11.4 14.2 C 12.3 16.6, 14.3 18.9, 16.9 20.3 C 18.4 21.1, 19.8 21.3, 20.7 20.8 C 21.4 20.4, 21.6 19.7, 21.5 19.1 C 21.4 18.7, 19.6 17.8, 19 17.7 C 18.5 17.6, 18.1 18.5, 17.6 18.8 C 16.4 18.4, 14.6 16.8, 13.9 15.4 C 14.2 14.9, 14.9 14.5, 14.8 13.9 C 14.7 13.3, 14 11.6, 13.6 11 C 13.1 10.4, 12 10.2, 11.4 10.6 Z" stroke-width="1.6"></path>
+  </svg>
 </a>
 
 <style>
@@ -24,10 +20,11 @@ const href = `https://wa.me/${site.whatsappNumber}?text=${encodeURIComponent(sit
     bottom: 24px;
     right: 24px;
     z-index: 100;
-    width: 58px;
-    height: 58px;
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
-    background: var(--blush);
+    background: var(--gold);
+    color: var(--white);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -37,7 +34,7 @@ const href = `https://wa.me/${site.whatsappNumber}?text=${encodeURIComponent(sit
       background var(--ease);
   }
   .wa:hover {
-    background: var(--ink);
+    background: var(--plum);
   }
   @media (prefers-reduced-motion: no-preference) {
     .wa:hover {

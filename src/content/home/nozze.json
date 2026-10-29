@@ -1,8 +1,10 @@
 {
   "eyebrow": "Per gli sposi",
-  "title": "La prima avventura della vostra vita insieme.",
+  "title": "La prima avventura della vostra vita insieme",
   "text": "Il vostro sì merita un viaggio che lo racconti: giornate su misura, dettagli romantici pensati per voi, nessun momento lasciato al caso.",
   "image": "",
   "imageAlt": "",
-  "cta": "Inizia a sognare"
+  "cta": "Scopri i viaggi di nozze",
+  "link": "#viaggi",
+  "filter": "Honey Moon"
 }

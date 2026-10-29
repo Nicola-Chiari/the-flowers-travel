@@ -3,9 +3,10 @@ import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
 import ChiSono from '../components/ChiSono.astro';
 import Servizi from '../components/Servizi.astro';
-import Divider from '../components/Divider.astro';
+import WaveDivider from '../components/WaveDivider.astro';
 import ComeFunziona from '../components/ComeFunziona.astro';
 import Viaggi from '../components/Viaggi.astro';
+import Destinazioni from '../components/Destinazioni.astro';
 import Feature from '../components/Feature.astro';
 import Consigli from '../components/Consigli.astro';
 import Recensioni from '../components/Recensioni.astro';
@@ -19,11 +20,12 @@ const { isVisible } = await getVisibleSections();
   <Hero />
   <ChiSono />
   <Servizi />
-  <Divider />
+  <WaveDivider />
   <ComeFunziona />
   {isVisible('viaggi') && <Viaggi />}
+  {isVisible('destinazioni') && <Destinazioni />}
   <Feature id="nozze" />
-  <Divider />
+  <WaveDivider variant="after-nozze" />
   <Feature id="famiglia" />
   {isVisible('consigli') && <Consigli />}
   {isVisible('recensioni') && <Recensioni />}

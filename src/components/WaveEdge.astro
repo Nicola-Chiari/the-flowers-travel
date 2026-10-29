@@ -1,0 +1,40 @@
+---
+// Bordo ondulato che fa "entrare" il colore di una sezione in quella vicina.
+interface Props {
+  position: 'top' | 'bottom';
+  color: string;
+  z?: number;
+}
+const { position, color, z } = Astro.props;
+const d =
+  position === 'top'
+    ? 'M0,34 C180,8 360,8 540,30 C720,52 900,56 1080,34 C1260,12 1350,14 1440,24 L1440,60 L0,60 Z'
+    : 'M0,0 L1440,0 L1440,30 C1260,52 1080,54 900,32 C720,10 540,6 360,28 C200,48 90,44 0,30 Z';
+---
+
+<svg
+  class:list={['wave-edge', `wave-edge--${position}`]}
+  viewBox="0 0 1440 60"
+  preserveAspectRatio="none"
+  aria-hidden="true"
+  style={z !== undefined ? `z-index: ${z}` : undefined}
+>
+  <path d={d} fill={color}></path>
+</svg>
+
+<style>
+  .wave-edge {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    display: block;
+    pointer-events: none;
+  }
+  .wave-edge--top {
+    top: -59px;
+  }
+  .wave-edge--bottom {
+    bottom: -59px;
+  }
+</style>
