@@ -1,11 +1,21 @@
 {
   "eyebrow": "Storie vere",
   "title": "Viaggi realizzati",
+  "subtitle": "Ogni viaggio ha una storia da raccontare",
   "allLabel": "Tutti",
   "categories": [
-    { "name": "Honey Moon" },
-    { "name": "Famiglia" },
-    { "name": "Coppia" }
+    {
+      "name": "Honey Moon"
+    },
+    {
+      "name": "Famiglia"
+    },
+    {
+      "name": "Coppia"
+    },
+    {
+      "name": "Amici"
+    }
   ],
-  "modalCta": "Vorrei un viaggio così"
+  "ctaLabel": "Vorrei un viaggio così"
 }

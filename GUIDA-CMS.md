@@ -31,23 +31,27 @@ A sinistra trovi le **raccolte**, cioè le parti del sito:
 
 ## 3. Aggiungere un viaggio
 
+Ogni viaggio diventa una **cartolina** nel carosello della home e una **pagina tutta sua** (es. `tuodominio.it/viaggi/aicha-e-nicola-australia`).
+
 1. **✈ Viaggi realizzati** → **+ Viaggio**.
 
 ![Elenco dei viaggi](docs/guida/2-elenco-viaggi.jpg)
 
 2. Compila:
-   - **Titolo**, **Destinazione**, **Durata** (es. "12 giorni").
+   - **Chi ha viaggiato** (es. "Aicha e Nicola"): appare in corsivo sopra il titolo.
+   - **Titolo del viaggio** (es. "Australia on the road"), **Destinazione**, **Durata** (es. "21 giorni").
    - **Categoria**: scegli dall'elenco. Per creare una categoria nuova vai prima su **Home → Viaggi realizzati (titoli e categorie)**.
    - **Foto copertina** e la sua **descrizione** (una frase su cosa si vede: serve a chi non vede le immagini e a Google).
-   - **Galleria** (facoltativa): altre foto, si sfogliano nel racconto.
-   - **Francobollo**: paese, sigla e valore stampati sul francobollo della cartolina. L'anno del timbro, se lo lasci vuoto, è l'anno in corso.
+   - **Francobollo**: l'immagine del francobollo appoggiato sulla foto (meglio un PNG con sfondo trasparente).
+   - **Le tappe** (facoltative): per ogni tappa i giorni (es. "Giorni 1–4"), il luogo e due righe di descrizione. Nella pagina del viaggio diventano un percorso.
+   - **Galleria** (facoltativa): altre foto, in fondo alla pagina del viaggio.
    - **Ordine**: numero più basso = cartolina più a sinistra.
-   - **Racconto**: il testo che si apre cliccando sulla cartolina.
+   - **Racconto**: il testo principale della pagina del viaggio.
 3. **Pubblica → Pubblica ora**.
 
-![Nuovo viaggio](docs/guida/3-nuovo-viaggio.jpg)
+![Modifica di un viaggio](docs/guida/3-nuovo-viaggio.jpg)
 
-Per **nascondere** un viaggio senza cancellarlo spegni **Pubblicato**. Per cancellarlo: apri il viaggio → **Elimina voce**.
+L'indirizzo della pagina si crea da solo con "chi ha viaggiato" e il titolo. Per **nascondere** un viaggio senza cancellarlo spegni **Pubblicato**. Per cancellarlo: apri il viaggio → **Elimina voce**.
 
 ## 4. Cambiare una foto
 
@@ -61,13 +65,19 @@ Le foto possono essere pesanti: il sito le rimpicciolisce da solo. Due regole:
 - Formati: **JPG o PNG**. Le foto **HEIC** dell'iPhone non vanno bene: su iPhone vai in *Impostazioni → Fotocamera → Formati → Più compatibile*, oppure condividile come JPG.
 - Video di apertura: **MP4**, al massimo 6 MB.
 
-### La foto di "Chi sono"
+### La sezione "Chi sono"
 
-La foto è allineata al testo con due segni:
-- `[[foto]]` nel **titolo**: lì comincia la foto (oggi prima della parola "viaggio");
-- `[[/foto]]` in un **paragrafo**: lì finisce (oggi prima di "sono empatica").
+- Nel **titolo corsivo**, la parte tra `[[` e `]]` viene sottolineata dall'onda dorata (oggi "Elena, benvenuto nel mio").
+- La foto è allineata al testo con due segni: `[[foto]]` nel **titolo** (dove comincia) e `[[/foto]]` in un **paragrafo** (dove finisce). Se li cancelli, la foto prende l'altezza di tutto il testo.
+- Il pulsante "Scopri la mia storia" compare solo se scrivi un **Link pulsante**.
 
-Puoi spostarli nel testo. Se li cancelli entrambi, la foto prende l'altezza di tutto il testo.
+### Menu e pulsanti
+
+Nel menu in alto (**Impostazioni sito → Testi del sito → Menu in alto**) ogni voce ha un **link**:
+- `#nome-sezione` porta a una sezione della home (es. `#viaggi`, `#contatti`);
+- un indirizzo come `/viaggi/aicha-e-nicola-australia` porta a una pagina.
+
+Le voci con **sottovoci** mostrano la tendina. Lo stesso vale per i link di Servizi e Destinazioni: se il link è vuoto, la scheda non è cliccabile.
 
 ## 5. Recensioni
 
@@ -76,10 +86,8 @@ Pubblica solo **recensioni vere, con il permesso di chi le ha scritte**: le rece
 
 ## 6. Richieste dal modulo di contatto
 
-Le richieste arrivano via email a **theflowerstravel@gmail.com**. Contengono le risposte alle domande, nome, email, telefono (se lo lasciano) e il consenso privacy.
-Le domande del modulo si cambiano in **Home → Contatti → Domande del modulo**.
-
-Gli iscritti alla newsletter si trovano nel pannello di Netlify, alla voce **Forms → newsletter**.
+Le richieste arrivano via email a **theflowerstravel@gmail.com** con nome, cognome, email, telefono (se lo lasciano), il messaggio e il consenso privacy.
+I testi del modulo si cambiano in **Impostazioni sito → Testi del sito → Modulo di contatto**.
 
 ## 7. Se qualcosa va storto
 

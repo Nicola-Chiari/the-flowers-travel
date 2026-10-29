@@ -1,0 +1,42 @@
+{
+  "eyebrow": "Destinazioni",
+  "title": "Dove possiamo andare insieme",
+  "intro": "Le mete che conosco e amo di più, da cui partire per immaginare il tuo viaggio",
+  "items": [
+    {
+      "name": "Asia",
+      "image": "",
+      "imageAlt": "",
+      "icon": "asia",
+      "link": ""
+    },
+    {
+      "name": "Africa",
+      "image": "",
+      "imageAlt": "",
+      "icon": "africa",
+      "link": ""
+    },
+    {
+      "name": "Oceania",
+      "image": "",
+      "imageAlt": "",
+      "icon": "oceania",
+      "link": ""
+    },
+    {
+      "name": "America",
+      "image": "",
+      "imageAlt": "",
+      "icon": "america",
+      "link": ""
+    },
+    {
+      "name": "Europa",
+      "image": "",
+      "imageAlt": "",
+      "icon": "europa",
+      "link": ""
+    }
+  ]
+}

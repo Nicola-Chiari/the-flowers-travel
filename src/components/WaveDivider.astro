@@ -1,0 +1,41 @@
+---
+import GoldWave from './GoldWave.astro';
+
+interface Props {
+  variant?: 'after-services' | 'after-nozze';
+}
+const { variant = 'after-services' } = Astro.props;
+---
+
+<div class:list={['wave-divider', `wave-divider--${variant}`]} aria-hidden="true">
+  <GoldWave width={364} height={23} />
+</div>
+
+<style>
+  .wave-divider {
+    padding: 38px var(--gutter);
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+  }
+  .wave-divider :global(svg) {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+  .wave-divider--after-services {
+    margin-top: -56px;
+  }
+  .wave-divider--after-nozze {
+    margin-top: -114px;
+    top: 19px;
+    z-index: auto;
+  }
+  @media (max-width: 759px) {
+    .wave-divider--after-nozze {
+      margin-top: -40px;
+      top: 0;
+    }
+  }
+</style>

@@ -7,6 +7,7 @@ const hero = await single('hero');
 const ui = await single('ui');
 const mp4 = resolveFile(hero.video);
 const webm = resolveFile(hero.videoWebm);
+const wave = 'M6 0 Q 10 6.875 6 13.75 T 6 27.5 T 6 41.25 T 6 55';
 ---
 
 <section id="hero" class="hero">
@@ -34,9 +35,22 @@ const webm = resolveFile(hero.videoWebm);
   <div class="hero__veil"></div>
 
   <a href="#chi-sono" class="hero__scroll" aria-label={ui.heroScroll}>
-    <span class="hero__line hero__line--bottom" data-drop-bottom></span>
+    <span class="hero__line" data-drop-bottom>
+      <svg width="12" height="55" viewBox="0 0 12 55" fill="none" aria-hidden="true"
+        ><path d={wave} stroke="#d9bec2" stroke-width="2.8" stroke-linecap="round"></path></svg
+      >
+    </span>
   </a>
-  <span class="hero__drop" data-drop aria-hidden="true"></span>
+  <span class="hero__drop" data-drop aria-hidden="true">
+    <svg viewBox="0 0 24 24"
+      ><path
+        d="M12 0.5 L14.9 8.6 L23.4 8.8 L16.6 14 L19 22.3 L12 17.4 L5 22.3 L7.4 14 L0.6 8.8 L9.1 8.6 Z"
+        fill="#FFFFFF"
+        stroke="#FFFFFF"
+        stroke-width="1"
+        stroke-linejoin="round"></path></svg
+    >
+  </span>
 
   <div class="hero__content">
     <Img
@@ -46,9 +60,14 @@ const webm = resolveFile(hero.videoWebm);
       widths={[275, 550, 825]}
       sizes="275px"
       loading="eager"
+      data-hero-logo
     />
-    <p class="hero__signature">{hero.signature}</p>
-    <span class="hero__line hero__line--top" data-drop-top></span>
+    <div class="hero__spacer" aria-hidden="true"></div>
+    <span class="hero__line hero__line--top" data-drop-top>
+      <svg width="12" height="55" viewBox="0 0 12 55" fill="none" aria-hidden="true"
+        ><path d={wave} stroke="#d9bec2" stroke-width="2.8" stroke-linecap="round"></path></svg
+      >
+    </span>
     <h1 class="hero__title">
       {hero.titleLine1}
       {
@@ -96,29 +115,28 @@ const webm = resolveFile(hero.videoWebm);
   }
   .hero__scroll {
     position: absolute;
-    bottom: 28px;
+    bottom: 79px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 1;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
     padding: 0 22px;
-    color: var(--white);
     opacity: 0.85;
   }
   .hero__line {
+    position: relative;
     display: block;
     width: 1px;
     height: 55px;
   }
-  .hero__line--bottom {
-    background: rgba(255, 255, 255, 0.35);
+  .hero__line svg {
+    position: absolute;
+    left: -6px;
+    top: 0;
+    overflow: visible;
   }
   .hero__line--top {
-    position: relative;
-    background: rgba(255, 255, 255, 0.5);
+    top: -42px;
     margin: 0 0 44px;
   }
   .hero__drop {
@@ -128,17 +146,24 @@ const webm = resolveFile(hero.videoWebm);
     width: 6px;
     height: 6px;
     margin-left: -3px;
-    border-radius: 50%;
-    background: var(--white);
-    box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.9);
-    z-index: 1;
+    z-index: 3;
     opacity: 0;
+  }
+  .hero__drop svg {
+    position: absolute;
+    left: -3px;
+    top: -3px;
+    width: 12px;
+    height: 12px;
+    overflow: visible;
+    filter: drop-shadow(0 0 3px #ffffff) drop-shadow(0 0 6px rgba(255, 255, 255, 0.9));
   }
   .hero__content {
     position: relative;
     z-index: 1;
     max-width: 78vw;
     margin: 0 auto;
+    transform: translateY(-70px);
     color: var(--white);
     text-align: center;
     display: flex;
@@ -151,13 +176,13 @@ const webm = resolveFile(hero.videoWebm);
     margin-top: 50px;
     margin-bottom: -150px;
   }
-  .hero__signature {
-    font-family: var(--font-script);
-    font-size: 56px;
-    color: var(--white);
+  .hero__spacer {
+    height: 70px;
     margin: 0 0 44px;
   }
   .hero__title {
+    position: relative;
+    top: -57px;
     font-family: var(--font-title);
     font-weight: 500;
     font-size: clamp(44px, 8vw, 92px);
@@ -170,6 +195,8 @@ const webm = resolveFile(hero.videoWebm);
     white-space: nowrap;
   }
   .hero__subtitle {
+    position: relative;
+    top: -38px;
     font-size: clamp(15px, 2.1vw, 22px);
     line-height: 1.6;
     white-space: nowrap;
@@ -177,6 +204,8 @@ const webm = resolveFile(hero.videoWebm);
     opacity: 0.92;
   }
   .hero__actions {
+    position: relative;
+    top: -19px;
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
@@ -188,7 +217,8 @@ const webm = resolveFile(hero.videoWebm);
     align-items: center;
     justify-content: center;
     gap: 10px;
-    width: 220px;
+    min-width: 220px;
+    white-space: nowrap;
     color: var(--white);
     text-decoration: none;
     padding: 16px 32px;
@@ -199,14 +229,15 @@ const webm = resolveFile(hero.videoWebm);
       background var(--ease);
   }
   .hero__btn--fill {
-    background: var(--blush);
-    border: 1px solid var(--blush);
-    border-radius: var(--petal);
+    background: var(--olive);
+    border: 1px solid var(--olive);
+    font-weight: 700;
+    border-radius: var(--petal-lg);
   }
   .hero__btn--outline {
     background: transparent;
     border: 1px solid var(--white);
-    border-radius: var(--petal-alt);
+    border-radius: var(--petal-lg-alt);
   }
   .hero__btn--outline:hover {
     background: rgba(255, 255, 255, 0.15);
@@ -226,8 +257,15 @@ const webm = resolveFile(hero.videoWebm);
     }
   }
   @media (max-width: 759px) {
+    .hero {
+      padding-bottom: 150px;
+    }
+    .hero__scroll {
+      bottom: 40px;
+    }
     .hero__content {
       max-width: 100%;
+      transform: translateY(-30px);
     }
     .hero__title {
       width: auto;
@@ -236,9 +274,8 @@ const webm = resolveFile(hero.videoWebm);
     .hero__title-2 {
       white-space: normal;
     }
-    .hero__signature {
-      font-size: clamp(34px, 10vw, 44px);
-      white-space: nowrap;
+    .hero__btn {
+      min-width: 200px;
     }
   }
 </style>
@@ -246,13 +283,13 @@ const webm = resolveFile(hero.videoWebm);
 <script>
   const hero = document.getElementById('hero');
   const video = hero?.querySelector<HTMLVideoElement>('[data-hero-video]');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Video solo su schermi grandi e connessioni non lente: altrimenti resta l'immagine.
   if (video) {
     const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } })
       .connection;
     const slow = conn?.saveData || /(^|-)2g|3g/.test(conn?.effectiveType ?? '');
-    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (matchMedia('(min-width: 760px)').matches && !slow && !reduced) {
       video.querySelectorAll<HTMLSourceElement>('source[data-src]').forEach((s) => (s.src = s.dataset.src!));
       video.load();
@@ -260,15 +297,59 @@ const webm = resolveFile(hero.videoWebm);
     }
   }
 
-  // Goccia luminosa che scende lungo le due linee (5s, infinito).
   const dot = hero?.querySelector<HTMLElement>('[data-drop]');
   const top = hero?.querySelector<HTMLElement>('[data-drop-top]');
   const bottom = hero?.querySelector<HTMLElement>('[data-drop-bottom]');
-  let anim: Animation | undefined;
+  const logo = hero?.querySelector<HTMLImageElement>('[data-hero-logo]');
+  const title = hero?.querySelector<HTMLElement>('.hero__title');
+  let inkRatio: number | undefined;
 
+  // Il PNG del logo ha spazio vuoto sotto: misuriamo dove finisce il disegno
+  // e mettiamo la linea ondulata a metà tra logo e titolo.
+  function centerLine() {
+    if (!logo || !title || !top) return;
+    if (inkRatio === undefined && logo.complete && logo.naturalHeight) {
+      try {
+        const c = document.createElement('canvas');
+        const w = (c.width = Math.min(400, logo.naturalWidth));
+        const h = (c.height = Math.round((logo.naturalHeight * w) / logo.naturalWidth));
+        const ctx = c.getContext('2d')!;
+        ctx.drawImage(logo, 0, 0, w, h);
+        const d = ctx.getImageData(0, 0, w, h).data;
+        let last = h - 1;
+        outer: for (let y = h - 1; y >= 0; y--)
+          for (let x = 0; x < w; x++)
+            if (d[(y * w + x) * 4 + 3] > 20) {
+              last = y;
+              break outer;
+            }
+        const ratio = (last + 1) / h;
+        if (ratio < 0.98) inkRatio = ratio;
+      } catch {
+        /* immagine non leggibile: si usa il valore di riserva */
+      }
+    }
+    const lr = logo.getBoundingClientRect();
+    const logoBottom = lr.top + lr.height * (inkRatio ?? 0.315);
+    const hr = title.getBoundingClientRect();
+    const cs = getComputedStyle(title);
+    const fs = parseFloat(cs.fontSize) || 0;
+    const lh = parseFloat(cs.lineHeight) || fs * 1.1;
+    const textTop = hr.top + (lh - fs) / 2 + fs * 0.16;
+    const cur = top.getBoundingClientRect();
+    const target = (logoBottom + textTop) / 2 - cur.height / 2;
+    const offset = parseFloat(top.style.top) || -42;
+    top.style.top = offset + (target - cur.top) + 'px';
+  }
+
+  let anim: Animation | undefined;
+  let wave: { topEnd: number; topStart: number; bottomStart: number; bottomEnd: number; topX: number; bottomX: number } | undefined;
+  let raf = 0;
+
+  // La stellina scende lungo la linea in alto, sparisce, riappare su quella in basso.
   function setupDrop() {
-    if (!hero || !dot || !top || !bottom) return;
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    centerLine();
+    if (!hero || !dot || !top || !bottom || reduced) return;
     const h = hero.getBoundingClientRect();
     const t = top.getBoundingClientRect();
     const b = bottom.getBoundingClientRect();
@@ -284,18 +365,48 @@ const webm = resolveFile(hero.videoWebm);
         { top: topEnd + 'px', opacity: 0, offset: 0.44, easing: 'linear' },
         { top: bottomStart + 'px', opacity: 0, offset: 0.48, easing: 'cubic-bezier(0.4, 0, 0.2, 1)' },
         { top: bottomStart + 'px', opacity: 1, offset: 0.52, easing: 'cubic-bezier(0.2, 0.8, 0.6, 1)' },
-        { top: bottomEnd + 'px', opacity: 1, offset: 0.96, easing: 'linear' },
-        { top: bottomEnd + 'px', opacity: 0, offset: 1 },
+        { top: bottomEnd + 'px', opacity: 1, offset: 0.9, easing: 'cubic-bezier(0.5, 0, 1, 1)' },
+        { top: bottomEnd + 140 + 'px', opacity: 0, offset: 1 },
       ],
       { duration: 5000, iterations: Infinity },
     );
+    const cx = h.left + h.width / 2;
+    wave = {
+      topStart,
+      topEnd,
+      bottomStart,
+      bottomEnd,
+      topX: t.left + t.width / 2 - cx,
+      bottomX: b.left + b.width / 2 - cx,
+    };
+    if (!raf) {
+      // Oscillazione orizzontale che segue l'onda della linea.
+      const tick = () => {
+        if (dot && wave) {
+          const y = parseFloat(getComputedStyle(dot).top) || 0;
+          const onTop = y <= wave.topEnd + 1;
+          const s = onTop ? wave.topStart : wave.bottomStart;
+          const len = onTop ? wave.topEnd - wave.topStart : wave.bottomEnd - wave.bottomStart;
+          const k = Math.max(0, Math.min(1, (y - s) / (len || 1))) * 4;
+          const i = Math.min(3, Math.floor(k));
+          const u = k - i;
+          const dx = (i % 2 === 0 ? 1 : -1) * 8 * u * (1 - u);
+          dot.style.translate = (onTop ? wave.topX : wave.bottomX) + dx + 'px 0';
+        }
+        raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
+    }
   }
 
   setupDrop();
+  logo?.addEventListener('load', setupDrop);
   document.fonts?.ready.then(setupDrop);
-  let resizeTimer: number | undefined;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = window.setTimeout(setupDrop, 120);
-  });
+  if (hero) new ResizeObserver(() => setupDrop()).observe(hero);
+  // Niente animazione quando l'apertura non è visibile.
+  if (hero)
+    new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) anim?.play();
+      else anim?.pause();
+    }).observe(hero);
 </script>

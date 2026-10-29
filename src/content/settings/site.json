@@ -4,23 +4,20 @@
   "email": "theflowerstravel@gmail.com",
   "whatsappNumber": "393389358824",
   "whatsappMessage": "Ciao! Vorrei raccontarti il viaggio che sogno.",
-  "vat": "",
-  "socials": {
-    "instagram": "https://instagram.com/theflowerstravel",
-    "facebook": "https://facebook.com/theflowerstravel",
-    "tiktok": "https://tiktok.com/@theflowerstravel",
-    "pinterest": "https://pinterest.com/theflowerstravel"
-  },
-  "footerTagline": "Viaggi su misura pensati nei dettagli, con ascolto e cura.",
-  "footerRight": "Travel design su misura",
-  "newsletterText": "Rimani aggiornata su destinazioni e proposte di viaggio.",
-  "newsletterThanks": "Grazie! Ti scriverò presto.",
-  "seo": {
-    "title": "The Flowers Travel — Elena, Travel Designer",
-    "description": "Viaggi su misura, viaggi di nozze e in famiglia progettati da zero attorno a te. Prima chiamata gratuita.",
-    "image": ""
-  },
+  "taxLabel": "C.F.",
+  "taxId": "",
   "logoNav": "/src/assets/uploads/logo-cropped-dark.png",
   "logoFooter": "/src/assets/uploads/logo-cropped.png",
-  "divider": "/src/assets/uploads/ginko-divider-2.png"
+  "tagline": "Dream, smile, go!",
+  "socials": {
+    "instagram": "https://instagram.com/theflowerstravel",
+    "tiktok": "https://tiktok.com/@theflowerstravel",
+    "facebook": "https://facebook.com/theflowerstravel",
+    "pinterest": ""
+  },
+  "seo": {
+    "title": "The Flowers Travel — Elena, Travel Designer",
+    "description": "Viaggi su misura, viaggi di nozze e in famiglia progettati attorno ai tuoi desideri. Prima chiamata senza impegno.",
+    "image": ""
+  }
 }

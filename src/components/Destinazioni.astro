@@ -1,0 +1,130 @@
+---
+import Img from './Img.astro';
+import WaveEdge from './WaveEdge.astro';
+import ContinentIcon from './ContinentIcon.astro';
+import { single } from '../lib/content';
+
+const d = await single('destinazioni');
+const shapes = ['var(--blob-1)', 'var(--blob-2)', 'var(--blob-3)', 'var(--blob-4)', 'var(--blob-5)'];
+const tilts = [-4, 4, -3, 4, -4];
+---
+
+<section id="destinazioni" class="dest">
+  <p class="eyebrow dest__eyebrow">{d.eyebrow}</p>
+  <h2 class="section-title dest__title">{d.title}</h2>
+  {d.intro && <p class="section-intro dest__intro">{d.intro}</p>}
+  <ul class="dest__list">
+    {
+      d.items.map((item, i) => {
+        const Tag = item.link ? 'a' : 'div';
+        return (
+          <li>
+            <Tag href={item.link || undefined} class="dest__item">
+              <div
+                class:list={['dest__img', { 'dest__img--empty': !item.image }]}
+                style={`border-radius: ${shapes[i % 5]}; transform: rotate(${tilts[i % 5]}deg);`}
+              >
+                {item.image && (
+                  <Img
+                    src={item.image}
+                    alt={item.imageAlt || item.name}
+                    widths={[240, 480]}
+                    sizes="(max-width: 759px) 40vw, 240px"
+                  />
+                )}
+              </div>
+              <h3>{item.name}</h3>
+              {item.icon && <ContinentIcon name={item.icon} />}
+            </Tag>
+          </li>
+        );
+      })
+    }
+  </ul>
+  <WaveEdge position="bottom" color="#E6D1D4" z={1} />
+</section>
+
+<style>
+  .dest {
+    position: relative;
+    z-index: 0;
+    padding: 168px var(--gutter) 148px;
+    background: var(--rose);
+  }
+  .dest__eyebrow {
+    margin: 0;
+  }
+  .dest__title {
+    color: var(--plum);
+    margin: 14px 0;
+  }
+  .dest__intro {
+    color: var(--plum);
+    margin-bottom: 64px;
+  }
+  .dest__list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 66px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .dest__list > li {
+    flex: 1 1 0;
+    min-width: 150px;
+    max-width: 240px;
+  }
+  .dest__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    color: var(--plum);
+    text-decoration: none;
+    transition: transform 0.2s ease;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    a.dest__item:hover {
+      transform: scale(1.04);
+    }
+  }
+  .dest__img {
+    width: 100%;
+    aspect-ratio: 0.88;
+    overflow: hidden;
+  }
+  .dest__img :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .dest__img--empty {
+    background: repeating-linear-gradient(45deg, var(--blush) 0 24px, var(--blush-light) 24px 48px);
+  }
+  .dest__item h3 {
+    font-family: var(--font-title);
+    font-weight: 600;
+    font-size: 24px;
+    margin: 0;
+  }
+  .dest__item :global(svg) {
+    display: block;
+    margin-top: -6px;
+  }
+  @media (max-width: 759px) {
+    .dest {
+      padding: 130px var(--gutter) 110px;
+    }
+    .dest__list {
+      gap: 36px 24px;
+    }
+    .dest__list > li {
+      flex: 0 1 calc(50% - 12px);
+      min-width: 0;
+    }
+  }
+</style>

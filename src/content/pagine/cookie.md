@@ -1,5 +1,5 @@
 ---
-title: "Cookie"
+title: "Cookie Policy"
 updated: 2026-10-25
 ---
 

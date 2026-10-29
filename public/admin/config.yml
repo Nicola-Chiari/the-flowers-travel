@@ -40,22 +40,19 @@ collections:
           - { name: email, label: "Email", widget: string }
           - { name: whatsappNumber, label: "Numero WhatsApp (solo cifre, es. 393389358824)", widget: string, pattern: ['^[0-9]{8,15}$', "Solo cifre, con prefisso internazionale, senza +"] }
           - { name: whatsappMessage, label: "Messaggio WhatsApp precompilato", widget: string }
-          - { name: vat, label: "Partita IVA", widget: string, required: false, hint: "Obbligatoria in Italia: compare in fondo al sito." }
-          - { name: logoNav, label: "Logo scuro (barra di navigazione)", widget: image }
+          - { name: taxLabel, label: "Dato fiscale: etichetta (es. C.F. o P.IVA)", widget: string, required: false }
+          - { name: taxId, label: "Dato fiscale: numero", widget: string, required: false, hint: "Compare nel footer. Vuoto = nascosto (ma per legge va indicato)." }
+          - { name: logoNav, label: "Logo della barra di navigazione", widget: image }
           - { name: logoFooter, label: "Logo chiaro (footer)", widget: image }
-          - { name: divider, label: "Decorazione tra le sezioni (ginkgo)", widget: image, required: false }
+          - { name: tagline, label: "Motto (footer e nastro sotto i viaggi)", widget: string }
           - name: socials
             label: "Social (lascia vuoto per nascondere)"
             widget: object
             fields:
               - { name: instagram, label: Instagram, widget: string, required: false }
-              - { name: facebook, label: Facebook, widget: string, required: false }
               - { name: tiktok, label: TikTok, widget: string, required: false }
+              - { name: facebook, label: Facebook, widget: string, required: false }
               - { name: pinterest, label: Pinterest, widget: string, required: false }
-          - { name: footerTagline, label: "Frase sotto il logo nel footer", widget: string }
-          - { name: footerRight, label: "Testo in basso a destra", widget: string }
-          - { name: newsletterText, label: "Testo newsletter", widget: string }
-          - { name: newsletterThanks, label: "Messaggio dopo iscrizione", widget: string }
           - name: seo
             label: SEO
             widget: object
@@ -65,7 +62,7 @@ collections:
               - { name: image, label: "Immagine condivisione social (1200×630)", widget: image, required: false }
 
       - name: ui
-        label: "Testi del sito (menu, moduli, footer)"
+        label: "Testi del sito (menu, modulo, footer)"
         file: src/content/settings/ui.json
         fields:
           - name: nav
@@ -73,15 +70,25 @@ collections:
             label_singular: "Voce"
             widget: list
             summary: "{{fields.label}}"
+            hint: "Link: #sezione per la home (es. #viaggi), oppure l'indirizzo di una pagina (es. /viaggi/aicha-e-nicola-australia)."
             fields:
               - { name: label, label: Testo, widget: string }
-              - { name: target, label: "Sezione", widget: select, options: [hero, chi-sono, servizi, come-funziona, viaggi, nozze, famiglia, consigli, recensioni, contatti] }
+              - { name: link, label: Link, widget: string }
+              - name: children
+                label: "Sottovoci (tendina)"
+                label_singular: "Sottovoce"
+                widget: list
+                required: false
+                summary: "{{fields.label}}"
+                fields:
+                  - { name: label, label: Testo, widget: string }
+                  - { name: link, label: Link, widget: string }
           - { name: navMenuOpen, label: "Pulsante menu mobile (per lettori di schermo): apri", widget: string }
           - { name: navMenuClose, label: "Pulsante menu mobile: chiudi", widget: string }
           - { name: heroScroll, label: "Linea in fondo all'apertura (per lettori di schermo)", widget: string }
           - { name: carouselPrev, label: "Freccia indietro (per lettori di schermo)", widget: string }
           - { name: carouselNext, label: "Freccia avanti (per lettori di schermo)", widget: string }
-          - { name: close, label: "Pulsante chiudi", widget: string }
+          - { name: more, label: "Scritta 'Scopri di più!' su cartoline e servizi", widget: string }
           - { name: whatsapp, label: "Pulsante WhatsApp (per lettori di schermo)", widget: string }
           - { name: starsLabel, label: "Stelle recensioni (per lettori di schermo)", widget: string, hint: "{n} viene sostituito dal numero di stelle" }
           - name: form
@@ -89,60 +96,43 @@ collections:
             widget: object
             collapsed: true
             fields:
-              - { name: nameLabel, label: "Etichetta nome", widget: string }
-              - { name: namePlaceholder, label: "Esempio nome", widget: string, required: false }
-              - { name: emailLabel, label: "Etichetta email", widget: string }
-              - { name: emailPlaceholder, label: "Esempio email", widget: string, required: false }
-              - { name: phoneLabel, label: "Etichetta telefono", widget: string }
-              - { name: phonePlaceholder, label: "Esempio telefono", widget: string, required: false }
+              - { name: name, label: "Campo nome", widget: string }
+              - { name: surname, label: "Campo cognome", widget: string }
+              - { name: email, label: "Campo email", widget: string }
+              - { name: phone, label: "Campo telefono", widget: string }
+              - { name: message, label: "Campo messaggio", widget: string }
               - { name: consentBefore, label: "Consenso: testo prima del link", widget: string, required: false }
               - { name: consentLink, label: "Consenso: testo del link alla privacy", widget: string }
               - { name: consentAfter, label: "Consenso: testo dopo il link", widget: string, required: false }
               - { name: sending, label: "Pulsante durante l'invio", widget: string }
+              - { name: errorName, label: "Errore nome mancante", widget: string }
               - { name: errorEmail, label: "Errore email non valida", widget: string }
+              - { name: errorMessage, label: "Errore messaggio mancante", widget: string }
               - { name: errorConsent, label: "Errore consenso mancante", widget: string }
               - { name: errorSend, label: "Errore invio", widget: string }
               - { name: emailSubject, label: "Oggetto dell'email che ricevi", widget: string }
-          - name: channels
-            label: "Altri canali"
-            widget: object
-            collapsed: true
-            fields:
-              - { name: phone, label: "Etichetta telefono", widget: string }
-              - { name: email, label: "Etichetta email", widget: string }
-          - name: newsletter
-            label: "Newsletter"
-            widget: object
-            collapsed: true
-            fields:
-              - { name: placeholder, label: "Testo nel campo email", widget: string }
-              - { name: button, label: "Pulsante", widget: string }
-              - { name: consentBefore, label: "Consenso: testo prima del link", widget: string, required: false }
-              - { name: consentLink, label: "Consenso: testo del link", widget: string }
-              - { name: consentAfter, label: "Consenso: testo dopo il link", widget: string, required: false }
-              - { name: errorSend, label: "Errore invio", widget: string }
           - name: footer
             label: "Footer"
             widget: object
             collapsed: true
             fields:
-              - { name: menuTitle, label: "Titolo colonna menu", widget: string }
-              - { name: linksTitle, label: "Titolo colonna link utili", widget: string }
-              - { name: socialTitle, label: "Titolo colonna social", widget: string }
-              - name: menu
-                label: "Voci menu"
-                label_singular: "Voce"
-                widget: list
-                summary: "{{fields.label}}"
-                fields:
-                  - { name: label, label: Testo, widget: string }
-                  - { name: target, label: "Sezione", widget: select, options: [hero, chi-sono, servizi, come-funziona, viaggi, nozze, famiglia, consigli, recensioni, contatti] }
-                  - { name: emphasis, label: "In evidenza", widget: boolean, default: false }
-                  - { name: indent, label: "Rientrata (sottovoce)", widget: boolean, default: false }
+              - { name: socialTitle, label: "Titolo social", widget: string }
               - { name: privacy, label: "Link Privacy", widget: string }
               - { name: cookie, label: "Link Cookie", widget: string }
               - { name: copyright, label: "Copyright", widget: string, hint: "{anno} viene sostituito dall'anno in corso" }
-              - { name: vatPrefix, label: "Prefisso Partita IVA", widget: string }
+          - name: trip
+            label: "Pagina del viaggio"
+            widget: object
+            collapsed: true
+            fields:
+              - { name: storyTitle, label: "Titolo racconto", widget: string }
+              - { name: itineraryTitle, label: "Titolo tappe", widget: string }
+              - { name: galleryTitle, label: "Titolo galleria", widget: string }
+              - { name: ctaTitle, label: "Box finale: titolo", widget: string }
+              - { name: ctaText, label: "Box finale: testo", widget: text }
+              - { name: ctaButton, label: "Box finale: pulsante", widget: string }
+              - { name: othersTitle, label: "Titolo 'Altri viaggi'", widget: string }
+              - { name: back, label: "Link 'Tutti i viaggi'", widget: string }
           - name: pages
             label: "Pagine di servizio"
             widget: object
@@ -154,7 +144,6 @@ collections:
               - { name: thanksText, label: "Pagina grazie: testo", widget: text }
               - { name: notFoundTitle, label: "Pagina non trovata: titolo", widget: string }
               - { name: notFoundText, label: "Pagina non trovata: testo", widget: text }
-              - { name: storyBack, label: "Link 'tutti i viaggi'", widget: string }
               - { name: articleBack, label: "Link 'tutti i consigli'", widget: string }
 
   # ---------- HOME ----------
@@ -169,7 +158,6 @@ collections:
           - { name: videoWebm, label: "Video in formato WebM (facoltativo, più leggero)", widget: file, required: false }
           - { name: poster, label: "Immagine di sfondo (mostrata mentre il video carica e su mobile)", widget: image, required: false }
           - { name: logo, label: "Logo", widget: image }
-          - { name: signature, label: "Firma", widget: string }
           - { name: titleLine1, label: "Titolo riga 1", widget: string }
           - { name: titleLine2, label: "Titolo riga 2", widget: string, required: false }
           - { name: subtitle, label: "Sottotitolo", widget: text }
@@ -180,28 +168,17 @@ collections:
         label: "Chi sono"
         file: src/content/home/chi-sono.json
         fields:
-          - { name: eyebrow, label: "Titolo corsivo", widget: string }
-          - { name: title, label: "Titolo", widget: string, hint: "Scrivi [[foto]] dove deve iniziare la foto (es. 'del tuo [[foto]]viaggio'). Se lo togli, la foto prende l'altezza di tutto il testo." }
+          - { name: eyebrow, label: "Titolo corsivo", widget: string, hint: "La parte tra [[ e ]] viene sottolineata dall'onda dorata." }
+          - { name: title, label: "Titolo", widget: string, hint: "[[foto]] segna dove inizia la foto. Se lo togli, la foto prende l'altezza di tutto il testo." }
           - { name: photo, label: "Foto", widget: image }
           - { name: photoAlt, label: "Descrizione foto", widget: string }
           - name: paragraphs
             label: "Paragrafi"
             label_singular: "Paragrafo"
             widget: list
-            field: { name: text, label: Testo, widget: text, hint: "Nel paragrafo dove deve finire la foto scrivi [[/foto]] (es. 'firmate, [[/foto]]sono')" }
-          - { name: whyTitle, label: "Titolo colonna sinistra", widget: string }
-          - name: whyItems
-            label: "Perché scegliermi"
-            label_singular: "Punto"
-            widget: list
-            field: { name: text, label: Testo, widget: text }
-          - { name: valuesTitle, label: "Titolo colonna destra", widget: string }
-          - name: valuesItems
-            label: "I miei valori"
-            label_singular: "Valore"
-            widget: list
-            required: false
-            field: { name: text, label: Testo, widget: text }
+            field: { name: text, label: Testo, widget: text, hint: "Nel paragrafo dove deve finire la foto scrivi [[/foto]]" }
+          - { name: cta, label: "Testo pulsante", widget: string, required: false }
+          - { name: ctaLink, label: "Link pulsante", widget: string, required: false, hint: "Vuoto = pulsante nascosto (es. finché non c'è la pagina 'Chi sono')." }
 
       - name: servizi
         label: "Servizi"
@@ -218,8 +195,8 @@ collections:
             fields:
               - { name: title, label: Titolo, widget: string }
               - { name: desc, label: Descrizione, widget: text }
-              - { name: icon, label: "Disegno / icona", widget: image, required: false, hint: "Meglio un PNG quadrato con sfondo trasparente." }
-          - { name: cta, label: "Testo pulsante", widget: string }
+              - { name: icon, label: "Disegno / icona", widget: image, required: false, hint: "Meglio un PNG con sfondo trasparente." }
+              - { name: link, label: "Link 'Scopri di più'", widget: string, required: false, hint: "Vuoto = la scheda non è cliccabile." }
 
       - name: comeFunziona
         label: "Come funziona"
@@ -235,7 +212,9 @@ collections:
             fields:
               - { name: title, label: Titolo, widget: string }
               - { name: desc, label: Descrizione, widget: text }
-              - { name: image, label: "Immagine (cerchio)", widget: image, required: false }
+              - { name: image, label: "Immagine", widget: image, required: false }
+          - { name: cta, label: "Testo pulsante", widget: string, required: false }
+          - { name: ctaLink, label: "Link pulsante", widget: string, required: false }
 
       - name: viaggiIntro
         label: "Viaggi realizzati (titoli e categorie)"
@@ -243,6 +222,7 @@ collections:
         fields:
           - { name: eyebrow, label: "Titolo corsivo", widget: string }
           - { name: title, label: "Titolo", widget: string }
+          - { name: subtitle, label: "Sottotitolo", widget: string, required: false }
           - { name: allLabel, label: "Etichetta filtro 'tutti'", widget: string }
           - name: categories
             label: "Categorie (filtri)"
@@ -251,7 +231,27 @@ collections:
             hint: "Un filtro compare solo se almeno un viaggio pubblicato usa quella categoria."
             fields:
               - { name: name, label: Nome, widget: string }
-          - { name: modalCta, label: "Pulsante nel racconto", widget: string }
+          - { name: ctaLabel, label: "Pulsante nella pagina del viaggio", widget: string }
+
+      - name: destinazioni
+        label: "Destinazioni"
+        file: src/content/home/destinazioni.json
+        fields:
+          - { name: eyebrow, label: "Titolo corsivo", widget: string }
+          - { name: title, label: "Titolo", widget: string }
+          - { name: intro, label: "Introduzione", widget: text, required: false }
+          - name: items
+            label: "Destinazioni"
+            label_singular: "Destinazione"
+            widget: list
+            required: false
+            summary: "{{fields.name}}"
+            fields:
+              - { name: name, label: Nome, widget: string }
+              - { name: image, label: Foto, widget: image, required: false }
+              - { name: imageAlt, label: "Descrizione foto", widget: string, required: false }
+              - { name: icon, label: Icona, widget: select, required: false, options: [asia, africa, oceania, america, europa] }
+              - { name: link, label: Link, widget: string, required: false, hint: "Vuoto = non cliccabile." }
 
       - name: nozze
         label: "Nozze"
@@ -263,6 +263,8 @@ collections:
           - { name: image, label: "Immagine", widget: image, required: false }
           - { name: imageAlt, label: "Descrizione immagine", widget: string, required: false }
           - { name: cta, label: "Testo pulsante", widget: string }
+          - { name: link, label: "Link pulsante", widget: string, hint: "#viaggi porta ai viaggi realizzati." }
+          - { name: filter, label: "Categoria da mostrare nei viaggi", widget: string, required: false, hint: "Es. Honey Moon: cliccando il pulsante il carosello mostra solo quella categoria." }
 
       - name: famiglia
         label: "Famiglia"
@@ -283,6 +285,7 @@ collections:
         fields:
           - { name: eyebrow, label: "Titolo corsivo", widget: string }
           - { name: title, label: "Titolo", widget: string }
+          - { name: subtitle, label: "Sottotitolo", widget: string, required: false }
           - name: items
             label: "Recensioni"
             label_singular: "Recensione"
@@ -295,28 +298,19 @@ collections:
               - { name: name, label: Nome, widget: string }
               - { name: trip, label: Viaggio, widget: string, required: false }
               - { name: stars, label: Stelle, widget: number, value_type: int, min: 1, max: 5, default: 5 }
+          - { name: inviteTitle, label: "Invito: titolo", widget: string, required: false }
+          - { name: inviteText, label: "Invito: testo", widget: text, required: false }
+          - { name: inviteButton, label: "Invito: pulsante", widget: string, required: false }
+          - { name: inviteLink, label: "Invito: link (es. pagina recensioni Google)", widget: string, required: false }
 
       - name: contatti
         label: "Contatti"
         file: src/content/home/contatti.json
         fields:
-          - { name: eyebrow, label: "Titolo corsivo", widget: string }
           - { name: title, label: "Titolo", widget: string }
           - { name: text, label: "Testo", widget: text }
-          - { name: openButton, label: "Pulsante apri modulo", widget: string }
-          - name: questions
-            label: "Domande del modulo"
-            label_singular: "Domanda"
-            widget: list
-            required: false
-            hint: "Nome, email, telefono e consenso privacy ci sono sempre."
-            summary: "{{fields.label}}"
-            fields:
-              - { name: label, label: Domanda, widget: string }
-              - { name: placeholder, label: Esempio, widget: string, required: false }
           - { name: submitButton, label: "Pulsante invio", widget: string }
           - { name: successMessage, label: "Messaggio dopo invio", widget: text }
-          - { name: otherChannels, label: "Titolo 'Altri canali'", widget: string }
 
   # ---------- VIAGGI ----------
   - name: viaggi
@@ -324,13 +318,14 @@ collections:
     label_singular: "Viaggio"
     folder: src/content/viaggi
     create: true
-    slug: "{{slug}}"
-    summary: "{{title}} — {{destination}} ({{category}})"
+    slug: "{{people}}-{{title}}"
+    summary: "{{people}} — {{title}} ({{category}})"
     sortable_fields: [order, title, category]
     fields:
-      - { name: title, label: Titolo, widget: string }
+      - { name: people, label: "Chi ha viaggiato (es. Aicha e Nicola)", widget: string, required: false }
+      - { name: title, label: "Titolo del viaggio (es. Australia on the road)", widget: string }
       - { name: destination, label: Destinazione, widget: string }
-      - { name: duration, label: "Durata (es. 18 giorni)", widget: string, required: false }
+      - { name: duration, label: "Durata (es. 21 giorni)", widget: string, required: false }
       - name: category
         label: Categoria
         widget: relation
@@ -341,6 +336,17 @@ collections:
         display_fields: ["categories.*.name"]
       - { name: cover, label: "Foto copertina", widget: image, required: false }
       - { name: coverAlt, label: "Descrizione foto", widget: string, required: false }
+      - { name: stamp, label: "Francobollo (immagine)", widget: image, required: false, hint: "Meglio un PNG con sfondo trasparente." }
+      - name: itinerary
+        label: "Le tappe (facoltative)"
+        label_singular: "Tappa"
+        widget: list
+        required: false
+        summary: "{{fields.day}} — {{fields.title}}"
+        fields:
+          - { name: day, label: "Giorni (es. Giorni 1–4)", widget: string, required: false }
+          - { name: title, label: Luogo, widget: string }
+          - { name: text, label: Descrizione, widget: text, required: false }
       - name: gallery
         label: "Galleria (facoltativa)"
         widget: list
@@ -348,15 +354,6 @@ collections:
         fields:
           - { name: image, label: Foto, widget: image }
           - { name: alt, label: Descrizione, widget: string, required: false }
-      - name: stamp
-        label: "Francobollo"
-        widget: object
-        collapsed: true
-        fields:
-          - { name: country, label: "Paese", widget: string, default: "Italia" }
-          - { name: mark, label: "Sigla centrale", widget: string, default: "TFT" }
-          - { name: value, label: "Valore", widget: string, default: "€ 1,20" }
-          - { name: year, label: "Anno timbro (vuoto = anno in corso)", widget: string, required: false }
       - { name: order, label: "Ordine (numero più basso = prima)", widget: number, value_type: int, default: 10 }
       - { name: published, label: Pubblicato, widget: boolean, default: true }
       - { name: body, label: Racconto, widget: markdown, buttons: [bold, italic, link, bulleted-list], editor_components: [] }
